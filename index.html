@@ -268,6 +268,40 @@
     .toast { position:fixed; z-index:40; left:50%; bottom:22px; transform:translate(-50%,18px); opacity:0; pointer-events:none; padding:12px 18px; max-width:calc(100vw - 28px); border-radius:99px; background:#effff2; color:#28653b; box-shadow:0 10px 30px rgba(0,0,0,.25); font-size:11px; font-weight:1000; text-align:center; transition:opacity .25s,transform .25s; }
     .toast.is-visible { opacity:1; transform:translate(-50%,0); }
 
+    /* Всплывающие достижения в стиле уведомлений The Sims */
+    .achievement-notification {
+      position:fixed; z-index:60; top:22px; right:22px; width:min(390px,calc(100vw - 28px));
+      display:grid; grid-template-columns:48px minmax(0,1fr) 28px; align-items:center; gap:12px;
+      padding:15px 15px 19px; border-radius:21px; overflow:hidden; color:var(--ink);
+      background:linear-gradient(135deg,rgba(255,255,255,.99),rgba(232,255,239,.98) 58%,rgba(239,236,255,.99));
+      border:1px solid rgba(255,255,255,.96); box-shadow:0 18px 52px rgba(8,13,34,.34);
+      opacity:0; transform:translate3d(calc(100% + 35px),0,0) scale(.97); pointer-events:none;
+      transition:opacity .32s ease,transform .45s var(--ease);
+    }
+    .achievement-notification.is-visible { opacity:1; transform:translate3d(0,0,0) scale(1); pointer-events:auto; }
+    .achievement-notification-icon {
+      position:relative; width:48px; height:48px; display:grid; place-items:center; border-radius:16px;
+      background:linear-gradient(145deg,#d9ff9c,#66e768 55%,#21ad4b); box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 5px 13px rgba(41,176,75,.22);
+    }
+    .achievement-notification-icon .plumbob { width:21px; height:33px; filter:drop-shadow(0 2px 3px rgba(20,100,42,.22)); }
+    .achievement-notification-spark { position:absolute; right:-3px; top:-5px; color:#e5a82e; font-size:17px; text-shadow:0 1px 2px #fff; }
+    .achievement-notification-copy { min-width:0; }
+    .achievement-notification-kicker { display:block; margin-bottom:4px; color:#369b51; font-size:8px; line-height:1.3; font-weight:1000; letter-spacing:.11em; }
+    .achievement-notification-copy strong { display:block; color:#293653; font-size:14px; line-height:1.25; font-weight:1000; }
+    .achievement-notification-copy p { margin:4px 0 0; color:#6c7690; font-size:10px; line-height:1.45; font-weight:800; }
+    .achievement-notification-extra { display:block; margin-top:5px; color:#a15c83; font-size:9px; line-height:1.35; font-weight:900; }
+    .achievement-notification-close { align-self:start; width:27px; height:27px; border:0; border-radius:50%; color:#7b8298; background:rgba(95,105,145,.09); cursor:pointer; font-size:17px; line-height:1; }
+    .achievement-notification-close:hover { color:#26334e; background:rgba(95,105,145,.16); }
+    .achievement-notification-progress { position:absolute; left:0; right:0; bottom:0; height:4px; background:linear-gradient(90deg,#42c85d,#b7f36d); transform:scaleX(0); transform-origin:left center; }
+    .achievement-notification-progress.is-running { animation:achievement-countdown 5.2s linear forwards; }
+    @keyframes achievement-countdown { from { transform:scaleX(1); } to { transform:scaleX(0); } }
+    @media (max-width:600px) {
+      .achievement-notification { top:10px; right:10px; width:calc(100vw - 20px); grid-template-columns:42px minmax(0,1fr) 25px; gap:9px; padding:12px 12px 16px; border-radius:17px; }
+      .achievement-notification-icon { width:42px; height:42px; border-radius:13px; }
+      .achievement-notification-copy strong { font-size:12px; }
+      .achievement-notification-copy p { font-size:9px; }
+    }
+
     @media (max-width:1050px) {
       .game-shell { grid-template-columns:230px minmax(0,1fr); gap:13px; }
       .sidebar-panel { padding:14px; }
@@ -370,7 +404,9 @@
     }
 
     /* Sims испытание — без обрезки портретов и пламбоб прямо над активной участницей. */
-    .intro-layout { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(20px,3vw,48px); }
+    .intro-layout { grid-template-columns:minmax(340px,480px) minmax(0,1fr); gap:clamp(40px,6vw,96px); align-items:center; }
+    .intro-copy { max-width:470px; position:relative; z-index:2; }
+    .intro-characters { width:min(100%,560px); justify-self:end; padding:22px 0 10px 18px; }
     .intro-characters { align-items:stretch; padding:22px 0 10px; gap:clamp(8px,1.15vw,17px); }
     .intro-character,
     .intro-character:nth-child(2) {
@@ -554,6 +590,17 @@
     </section>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="achievement-notification" id="achievement-notification" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <div class="achievement-notification-icon" aria-hidden="true"><span class="plumbob"></span><span class="achievement-notification-spark">✦</span></div>
+      <div class="achievement-notification-copy">
+        <span class="achievement-notification-kicker">🏆 ДОСТИЖЕНИЕ РАЗБЛОКИРОВАНО</span>
+        <strong id="achievement-notification-title">Первое взаимодействие</strong>
+        <p id="achievement-notification-description">Первая карточка выполнена. История девичника началась!</p>
+        <small class="achievement-notification-extra" id="achievement-notification-extra" hidden></small>
+      </div>
+      <button class="achievement-notification-close" id="achievement-notification-close" type="button" aria-label="Закрыть уведомление">×</button>
+      <span class="achievement-notification-progress" id="achievement-notification-progress" aria-hidden="true"></span>
+    </div>
     <div class="confirm-modal" id="confirm-modal" hidden><div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description"><span class="pill">⚠️ ПОДТВЕРЖДЕНИЕ</span><h2 id="confirm-title">Начать заново?</h2><p id="confirm-description">Прогресс, отметки и очередь участниц будут сброшены.</p><div class="modal-actions"><button class="button button-light" id="cancel-reset" type="button">ОСТАВИТЬ КАК ЕСТЬ</button><button class="button button-green" id="confirm-reset" type="button">СБРОСИТЬ</button></div></div></div>
   </main>
 
@@ -591,17 +638,34 @@
     ];
 
     const CATEGORY_META = {
-      "КОМПРОМАТ": { icon: "📸", stat: "stat-compromat", label: "stat-compromat-label" },
-      "КРИНЖ-ЗАДАНИЯ": { icon: "🎭", stat: "stat-cringe", label: "stat-cringe-label" },
-      "НЕУДОБНЫЕ ВОПРОСЫ": { icon: "💬", stat: "stat-honesty", label: "stat-honesty-label" },
-      "СЕКРЕТНЫЕ КАРТОЧКИ": { icon: "💗", stat: "stat-friendship", label: "stat-friendship-label" }
+      "КОМПРОМАТ": { icon: "📸", stat: "stat-compromat", label: "stat-compromat-label", achievementId: "compromat-master" },
+      "КРИНЖ-ЗАДАНИЯ": { icon: "🎭", stat: "stat-cringe", label: "stat-cringe-label", achievementId: "cringe-star" },
+      "НЕУДОБНЫЕ ВОПРОСЫ": { icon: "💬", stat: "stat-honesty", label: "stat-honesty-label", achievementId: "truth-survivor" },
+      "СЕКРЕТНЫЕ КАРТОЧКИ": { icon: "💗", stat: "stat-friendship", label: "stat-friendship-label", achievementId: "friendship-heart" }
     };
+    const ACHIEVEMENTS = [
+      { id: "first-step", title: "Первое взаимодействие", description: "Первая карточка выполнена. История девичника началась!" },
+      { id: "social-butterfly", title: "Социальная бабочка", description: "Пять заданий позади. Навык общения повышен!" },
+      { id: "halfway", title: "Слишком много знаешь", description: "Половина секретов раскрыта. Отступать уже поздно." },
+      { id: "party-legend", title: "Легенда вечеринки", description: "15 карточек выполнено. Уровень дружбы зашкаливает!" },
+      { id: "perfect-save", title: "Идеальное сохранение", description: "Все 20 карточек пройдены. Это сохранение войдёт в историю!" },
+      { id: "compromat-master", title: "Хранительница компромата", description: "Все пять историй раскрыты. Секреты больше не секреты." },
+      { id: "cringe-star", title: "Звезда хаоса", description: "Все пять кринж-заданий выполнены. Стыд отменяется!" },
+      { id: "truth-survivor", title: "Без фильтров", description: "Все неудобные вопросы пережиты. Социальный навык +10." },
+      { id: "friendship-heart", title: "Сердце компании", description: "Все секретные карточки пройдены. Дружба прокачана!" },
+      { id: "secret-final", title: "Секретный финал открыт", description: "Последний сюрприз разблокирован. Время обниматься!" }
+    ];
     const STORAGE_KEY = "parvona-kompromat-game-v1";
-    const DEFAULT_STATE = { completedIds: [], openedIds: [], skippedIds: [], currentPlayerIndex: 0, currentCardId: null, screen: "intro" };
+    const DEFAULT_STATE = { completedIds: [], openedIds: [], skippedIds: [], unlockedAchievementIds: [], currentPlayerIndex: 0, currentCardId: null, screen: "intro" };
     let state = loadState();
     let timerInterval = null;
     let timerRemaining = 30;
     let toastTimeout = null;
+    let achievementTimeout = null;
+    let achievementHideTimeout = null;
+    let achievementQueue = [];
+    let achievementShowing = false;
+    let achievementDismissing = false;
     let previousFocus = null;
 
     const screens = {
@@ -626,7 +690,13 @@
       reset: document.getElementById("reset-button"), modal: document.getElementById("confirm-modal"),
       cancelReset: document.getElementById("cancel-reset"), confirmReset: document.getElementById("confirm-reset"),
       random: document.getElementById("random-card-button"), openFinal: document.getElementById("open-final-button"),
-      finalBack: document.getElementById("final-back-button"), toast: document.getElementById("toast")
+      finalBack: document.getElementById("final-back-button"), toast: document.getElementById("toast"),
+      achievementNotification: document.getElementById("achievement-notification"),
+      achievementTitle: document.getElementById("achievement-notification-title"),
+      achievementDescription: document.getElementById("achievement-notification-description"),
+      achievementExtra: document.getElementById("achievement-notification-extra"),
+      achievementProgress: document.getElementById("achievement-notification-progress"),
+      achievementClose: document.getElementById("achievement-notification-close")
     };
 
     function loadState() {
@@ -634,8 +704,10 @@
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (!saved || typeof saved !== "object") return { ...DEFAULT_STATE };
         const validIds = items => Array.isArray(items) ? [...new Set(items.filter(id => Number.isInteger(id) && id >= 1 && id <= TASKS.length))] : [];
+        const validAchievementIds = items => Array.isArray(items) ? [...new Set(items.filter(id => ACHIEVEMENTS.some(item => item.id === id)))] : [];
         return {
           completedIds: validIds(saved.completedIds), openedIds: validIds(saved.openedIds), skippedIds: validIds(saved.skippedIds),
+          unlockedAchievementIds: validAchievementIds(saved.unlockedAchievementIds),
           currentPlayerIndex: Number.isInteger(saved.currentPlayerIndex) && saved.currentPlayerIndex >= 0 && saved.currentPlayerIndex < PLAYERS.length ? saved.currentPlayerIndex : 0,
           currentCardId: Number.isInteger(saved.currentCardId) && saved.currentCardId >= 1 && saved.currentCardId <= TASKS.length ? saved.currentCardId : null,
           screen: ["intro", "game", "task", "final"].includes(saved.screen) ? saved.screen : "intro"
@@ -750,10 +822,12 @@
     function completeTask() {
       const id = state.currentCardId;
       if (!id) return;
-      if (!state.completedIds.includes(id)) {
+      const isNewCompletion = !state.completedIds.includes(id);
+      if (isNewCompletion) {
         state.completedIds.push(id);
         state.skippedIds = state.skippedIds.filter(item => item !== id);
         state.currentPlayerIndex = (state.currentPlayerIndex + 1) % PLAYERS.length;
+        evaluateCompletionAchievements();
       }
       state.currentCardId = null; saveState(); showScreen("game");
       showToast(`Следующий ход: ${PLAYERS[state.currentPlayerIndex].name} 💚`);
@@ -778,6 +852,72 @@
       el.toast.textContent = message; el.toast.classList.add("is-visible");
       window.clearTimeout(toastTimeout); toastTimeout = window.setTimeout(() => el.toast.classList.remove("is-visible"), 2600);
     }
+    function queueAchievementNotification(achievement, additional = []) {
+      if (!achievement) return;
+      achievementQueue.push({ achievement, additional });
+      if (!achievementShowing) showNextAchievementNotification();
+    }
+    function showNextAchievementNotification() {
+      if (!achievementQueue.length) { achievementShowing = false; return; }
+      achievementShowing = true;
+      achievementDismissing = false;
+      const { achievement, additional } = achievementQueue.shift();
+      el.achievementTitle.textContent = achievement.title;
+      el.achievementDescription.textContent = achievement.description;
+      el.achievementExtra.textContent = additional.length ? `Также открыто: ${additional.map(item => item.title).join(" · ")}` : "";
+      el.achievementExtra.hidden = additional.length === 0;
+      el.achievementNotification.hidden = false;
+      el.achievementNotification.classList.remove("is-visible");
+      el.achievementProgress.classList.remove("is-running");
+      void el.achievementNotification.offsetWidth;
+      el.achievementProgress.classList.add("is-running");
+      requestAnimationFrame(() => el.achievementNotification.classList.add("is-visible"));
+      window.clearTimeout(achievementTimeout);
+      achievementTimeout = window.setTimeout(dismissAchievementNotification, 5200);
+    }
+    function dismissAchievementNotification() {
+      if (!achievementShowing || achievementDismissing) return;
+      achievementDismissing = true;
+      window.clearTimeout(achievementTimeout);
+      el.achievementNotification.classList.remove("is-visible");
+      window.clearTimeout(achievementHideTimeout);
+      achievementHideTimeout = window.setTimeout(() => {
+        el.achievementNotification.hidden = true;
+        achievementProgressReset();
+        achievementShowing = false;
+        achievementDismissing = false;
+        showNextAchievementNotification();
+      }, 380);
+    }
+    function achievementProgressReset() {
+      el.achievementProgress.classList.remove("is-running");
+    }
+    function unlockAchievements(ids) {
+      const newlyUnlocked = [];
+      ids.forEach(id => {
+        const achievement = ACHIEVEMENTS.find(item => item.id === id);
+        if (achievement && !state.unlockedAchievementIds.includes(id)) {
+          state.unlockedAchievementIds.push(id);
+          newlyUnlocked.push(achievement);
+        }
+      });
+      if (newlyUnlocked.length) {
+        saveState();
+        queueAchievementNotification(newlyUnlocked[0], newlyUnlocked.slice(1));
+      }
+    }
+    function evaluateCompletionAchievements() {
+      const completedCount = state.completedIds.length;
+      const idsToUnlock = [];
+      const milestones = { 1: "first-step", 5: "social-butterfly", 10: "halfway", 15: "party-legend", 20: "perfect-save" };
+      if (milestones[completedCount]) idsToUnlock.push(milestones[completedCount]);
+      Object.entries(CATEGORY_META).forEach(([category, meta]) => {
+        const categoryTasks = TASKS.filter(task => task.category === category);
+        const categoryComplete = categoryTasks.length > 0 && categoryTasks.every(task => state.completedIds.includes(task.id));
+        if (categoryComplete) idsToUnlock.push(meta.achievementId);
+      });
+      unlockAchievements(idsToUnlock);
+    }
     function stopTimer() {
       if (timerInterval) window.clearInterval(timerInterval);
       timerInterval = null; timerRemaining = 30;
@@ -801,7 +941,7 @@
     function openResetModal() { previousFocus = document.activeElement; el.modal.hidden = false; el.cancelReset.focus(); }
     function closeResetModal() { el.modal.hidden = true; previousFocus?.focus?.(); }
     function resetGame() {
-      state = { ...DEFAULT_STATE, completedIds: [], openedIds: [], skippedIds: [] };
+      state = { ...DEFAULT_STATE, completedIds: [], openedIds: [], skippedIds: [], unlockedAchievementIds: [] };
       saveState(); closeResetModal(); showScreen("intro"); showToast("Новое сохранение создано. Поехали! ✨");
     }
     async function toggleFullscreen() {
@@ -810,7 +950,13 @@
         else await document.exitFullscreen();
       } catch (_) { showToast("Полноэкранный режим недоступен в этом браузере."); }
     }
-    function openFinal() { state.currentCardId = null; saveState(); showScreen("final"); }
+    function openFinal() {
+      state.currentCardId = null;
+      const alreadyUnlocked = state.unlockedAchievementIds.includes("secret-final");
+      unlockAchievements(["secret-final"]);
+      saveState(); showScreen("final");
+      if (!alreadyUnlocked) showToast("Последний сюрприз для подруг готов 💚");
+    }
     function handlePopState(event) {
       const requested = event.state?.appScreen;
       if (requested === "task" && state.currentCardId) showScreen("task", { pushHistory: false, focus: false });
@@ -847,6 +993,7 @@
       el.modal.addEventListener("click", event => { if (event.target === el.modal) closeResetModal(); });
       el.openFinal.addEventListener("click", openFinal);
       el.finalBack.addEventListener("click", () => showScreen("game"));
+      el.achievementClose.addEventListener("click", dismissAchievementNotification);
       window.addEventListener("popstate", handlePopState);
       document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
