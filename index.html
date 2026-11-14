@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#202a43">
   <meta name="description" content="Parvona Sims Edition — интерактивная игра для девичника.">
-  <title>Выбери свой компромат · Sims Edition</title>
+  <title>Sims испытание</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIHN0b3AtY29sb3I9IiNjYmZmNjYiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjNTRkYzU1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTI4ZTQzIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+CjxwYXRoIGQ9Ik0zMiAyIDU1IDI2IDMyIDYyIDkgMjZaIiBmaWxsPSIjMTc0ZjRiIiBvcGFjaXR5PSIuMTIiLz4KPHBhdGggZD0iTTMyIDIgNTUgMjYgMzIgNjIgOSAyNloiIGZpbGw9InVybCgjZykiIHN0cm9rZT0iI2U0ZmZiMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTMyIDIgMzIgNjIgOSAyNloiIGZpbGw9IiM1MWQ1NDYiIG9wYWNpdHk9Ii44Ii8+CjxwYXRoIGQ9Ik0zMiAyIDU1IDI2IDMyIDMyWiIgZmlsbD0iI2M0ZmY2YiIgb3BhY2l0eT0iLjk0Ii8+CjxwYXRoIGQ9Ik0zMiAzMiA1NSAyNiAzMiA2MloiIGZpbGw9IiMxNzk4M2YiIG9wYWNpdHk9Ii44NSIvPgo8cGF0aCBkPSJNMzIgMlY2Mk05IDI2IDMyIDMyIDU1IDI2IiBmaWxsPSJub25lIiBzdHJva2U9IiNmM2ZmYmYiIHN0cm9rZS1vcGFjaXR5PSIuNiIgc3Ryb2tlLXdpZHRoPSIxLjMiLz4KPC9zdmc+">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -367,6 +368,78 @@
     @media (prefers-reduced-motion:reduce) {
       *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
     }
+
+    /* Sims испытание — без обрезки портретов и пламбоб прямо над активной участницей. */
+    .intro-layout { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(20px,3vw,48px); }
+    .intro-characters { align-items:stretch; padding:22px 0 10px; gap:clamp(8px,1.15vw,17px); }
+    .intro-character,
+    .intro-character:nth-child(2) {
+      min-width:0; display:flex; flex-direction:column; transform:none;
+      border-radius:24px; overflow:hidden;
+      border:2px solid rgba(255,255,255,.95);
+      background:linear-gradient(160deg,#f5f8ff,#ffffff);
+      box-shadow:0 16px 33px rgba(54,65,108,.18),0 3px 0 rgba(255,255,255,.9);
+    }
+    .intro-character:hover,
+    .intro-character:nth-child(2):hover { transform:translateY(-7px); }
+    .intro-character-photo { width:100%; aspect-ratio:1/1; overflow:hidden; position:relative; background:linear-gradient(145deg,#e0fae3,#efe6ff); }
+    .intro-character .intro-character-photo img {
+      display:block; width:100%; height:100%; aspect-ratio:1/1;
+      object-fit:contain; object-position:50% 50%;
+    }
+    .intro-character-name {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      flex:1; min-height:64px; padding:12px 5px 14px; line-height:1.2;
+    }
+    .intro-character-name small { margin-top:7px; }
+    .player-list { padding-top:27px; gap:23px; }
+    .player-card { position:relative; overflow:visible; }
+    .player-avatar-wrap { position:relative; width:55px; height:55px; flex:0 0 55px; display:block; }
+    .player-card .player-avatar-wrap img { width:100%; height:100%; display:block; }
+    .head-plumbob-anchor {
+      position:absolute; z-index:5; top:-28px; left:50%;
+      transform:translateX(-50%); width:19px; height:31px;
+      opacity:0; visibility:hidden; pointer-events:none;
+      transition:opacity .18s ease,visibility .18s ease;
+      filter:drop-shadow(0 2px 5px rgba(31,181,53,.25));
+    }
+    .head-plumbob-anchor .plumbob { display:block; width:19px; height:30px; }
+    .player-card.is-active .head-plumbob-anchor {
+      opacity:1; visibility:visible;
+    }
+    .player-card.is-active .player-avatar-wrap img { border-color:#9bffa4; box-shadow:0 0 0 3px rgba(64,219,84,.2); }
+    .active-turn-panel { margin-top:25px; }
+    .active-turn-avatar-wrap { position:relative; display:block; width:48px; height:48px; flex:0 0 48px; }
+    .active-turn-avatar-wrap img { width:100%; height:100%; display:block; }
+    .active-turn-avatar-wrap .head-plumbob-anchor { opacity:1; visibility:visible; }
+    .task-player-card { padding-top:34px; }
+    .task-avatar-wrap { position:relative; display:block; width:112px; height:112px; flex:0 0 auto; }
+    .task-avatar-wrap img { display:block; width:100%; height:100%; }
+    .task-avatar-wrap .head-plumbob-anchor { opacity:1; visibility:visible; top:-30px; }
+    .task-avatar-wrap .head-plumbob-anchor .plumbob { width:22px; height:35px; }
+    @media (max-width:800px) {
+      .intro-layout { grid-template-columns:1fr; }
+      .intro-characters { width:min(590px,100%); }
+      .player-list { gap:12px; padding-top:25px; }
+      .player-avatar-wrap { width:58px; height:58px; flex-basis:58px; }
+      .player-card .player-avatar-wrap img { width:100%; height:100%; }
+      .task-player-card { padding-top:30px; }
+      .task-avatar-wrap { width:54px; height:54px; }
+    }
+    @media (max-width:560px) {
+      .intro-character,.intro-character:nth-child(2) { border-radius:16px; }
+      .intro-character-name { min-height:51px; padding:8px 3px 10px; font-size:9px; }
+      .intro-character-name small { font-size:7px; margin-top:5px; }
+      .intro-characters { gap:7px; padding-top:16px; }
+      .player-list { gap:9px; padding-top:28px; }
+      .player-avatar-wrap { width:50px; height:50px; flex-basis:50px; }
+      .player-card .player-avatar-wrap img { width:100%; height:100%; }
+      .head-plumbob-anchor { top:-25px; width:17px; height:27px; }
+      .head-plumbob-anchor .plumbob { width:17px; height:27px; }
+      .active-turn-panel { margin-top:24px; }
+      .task-avatar-wrap { width:54px; height:54px; }
+    }
+
   </style>
 </head>
 <body>
@@ -378,7 +451,7 @@
       <div class="intro-shell">
         <div class="intro-top">
           <div class="sim-logo"><span class="plumbob" aria-hidden="true"></span><span class="sim-logo-word">THE SIMS<small>ДЕВИЧНИК 2026</small></span></div>
-          <span class="intro-version">PARVONA EDITION · PLAYER 01</span>
+          <span class="intro-version">PARVONA EDITION · SIMS ИСПЫТАНИЕ</span>
         </div>
         <div class="intro-layout">
           <div class="intro-copy">
@@ -389,9 +462,9 @@
             <button class="button button-green intro-button" id="start-button" type="button"><span class="icon">▶</span> НАЧАТЬ ИГРУ</button>
           </div>
           <div class="intro-characters" aria-label="Персонажи игры">
-            <div class="intro-character"><img data-player-avatar="0" alt="Сим-персонаж Наташи Алексеевой"><span class="intro-character-name">Наташа Алексеева<small>SIM № 01</small></span></div>
-            <div class="intro-character"><img data-player-avatar="1" alt="Сим-персонаж Наташи Ананьевой"><span class="intro-character-name">Наташа Ананьева<small>SIM № 02</small></span></div>
-            <div class="intro-character"><img data-player-avatar="2" alt="Сим-персонаж Кати Русаковой"><span class="intro-character-name">Катя Русакова<small>SIM № 03</small></span></div>
+            <div class="intro-character"><div class="intro-character-photo"><img data-player-avatar="0" alt="Сим-персонаж Наташи Алексеевой"></div><span class="intro-character-name">Наташа Алексеева<small>SIM № 01</small></span></div>
+            <div class="intro-character"><div class="intro-character-photo"><img data-player-avatar="1" alt="Сим-персонаж Наташи Ананьевой"></div><span class="intro-character-name">Наташа Ананьева<small>SIM № 02</small></span></div>
+            <div class="intro-character"><div class="intro-character-photo"><img data-player-avatar="2" alt="Сим-персонаж Кати Русаковой"></div><span class="intro-character-name">Катя Русакова<small>SIM № 03</small></span></div>
           </div>
         </div>
         <div class="intro-bottom"><span>✦ ЗАКРЫТЫЙ ЖЕНСКИЙ КЛУБ</span><span>ФАМИЛИЮ СМЕНИТЬ МОЖНО. ДРУЖБУ — НЕТ.</span></div>
@@ -409,9 +482,9 @@
           <div class="glass-panel sidebar-panel">
             <h3 class="panel-heading">👭 ПЕРСОНАЖИ <strong>3/3</strong></h3>
             <div class="player-list">
-              <button class="player-card" type="button" data-player-index="0" aria-pressed="false"><img data-player-avatar="0" alt=""><span class="player-card-copy"><span class="player-card-name">Наташа Алексеева</span><span class="player-card-role">ИГРОК 01</span></span><span class="player-card-indicator"></span></button>
-              <button class="player-card" type="button" data-player-index="1" aria-pressed="false"><img data-player-avatar="1" alt=""><span class="player-card-copy"><span class="player-card-name">Наташа Ананьева</span><span class="player-card-role">ИГРОК 02</span></span><span class="player-card-indicator"></span></button>
-              <button class="player-card" type="button" data-player-index="2" aria-pressed="false"><img data-player-avatar="2" alt=""><span class="player-card-copy"><span class="player-card-name">Катя Русакова</span><span class="player-card-role">ИГРОК 03</span></span><span class="player-card-indicator"></span></button>
+              <button class="player-card" type="button" data-player-index="0" aria-pressed="false"><span class="player-avatar-wrap"><span class="head-plumbob-anchor" aria-hidden="true"><span class="plumbob"></span></span><img data-player-avatar="0" alt=""></span><span class="player-card-copy"><span class="player-card-name">Наташа Алексеева</span><span class="player-card-role">ИГРОК 01</span></span></button>
+              <button class="player-card" type="button" data-player-index="1" aria-pressed="false"><span class="player-avatar-wrap"><span class="head-plumbob-anchor" aria-hidden="true"><span class="plumbob"></span></span><img data-player-avatar="1" alt=""></span><span class="player-card-copy"><span class="player-card-name">Наташа Ананьева</span><span class="player-card-role">ИГРОК 02</span></span></button>
+              <button class="player-card" type="button" data-player-index="2" aria-pressed="false"><span class="player-avatar-wrap"><span class="head-plumbob-anchor" aria-hidden="true"><span class="plumbob"></span></span><img data-player-avatar="2" alt=""></span><span class="player-card-copy"><span class="player-card-name">Катя Русакова</span><span class="player-card-role">ИГРОК 03</span></span></button>
             </div>
             <select id="player-select" class="sr-only" aria-label="Выбрать участницу"><option value="0">Наташа Алексеева</option><option value="1">Наташа Ананьева</option><option value="2">Катя Русакова</option></select>
           </div>
@@ -429,7 +502,7 @@
 
         <section class="game-main">
           <div class="game-title-panel"><p class="eyebrow">НОВАЯ ЦЕЛЬ ДОБАВЛЕНА</p><h1 class="game-title" id="game-title">ВЫБЕРИ СВОЙ КОМПРОМАТ</h1><p class="game-subtitle">Выбери номер. Не задавай вопросов. Категория пока секрет.</p></div>
-          <div class="active-turn-panel"><img id="active-player-avatar" data-player-avatar="0" alt=""><div class="active-turn-copy"><span>СЕЙЧАС ХОДИТ</span><strong id="active-player-name">Наташа Алексеева</strong></div><span class="plumbob turn-plumbob" aria-hidden="true"></span></div>
+          <div class="active-turn-panel"><span class="active-turn-avatar-wrap"><span class="head-plumbob-anchor" aria-hidden="true"><span class="plumbob"></span></span><img id="active-player-avatar" data-player-avatar="0" alt=""></span><div class="active-turn-copy"><span>СЕЙЧАС ХОДИТ</span><strong id="active-player-name">Наташа Алексеева</strong></div></div>
           <div class="board-panel">
             <div class="board-heading"><span>🎲 ВЫБЕРИ ВЗАИМОДЕЙСТВИЕ</span><span>20 СЕКРЕТНЫХ КАРТОЧЕК</span></div>
             <div class="card-grid" id="card-grid" aria-label="Игровые карточки с номерами от 1 до 20"></div>
@@ -445,7 +518,7 @@
     <section class="screen task-screen" id="task-screen" aria-labelledby="task-question" hidden>
       <header class="task-topbar"><button class="back-link" id="back-to-field" type="button">← НАЗАД К ИГРОВОМУ ПОЛЮ</button><span class="task-top-label">THE SIMS · СОЦИАЛЬНОЕ ВЗАИМОДЕЙСТВИЕ</span><span class="topbar-chip">✦ PARVONA EDITION</span></header>
       <div class="task-shell">
-        <aside class="task-player-card"><img id="task-player-avatar" data-player-avatar="0" alt=""><span>СЕЙЧАС ИГРАЕТ</span><strong id="task-player-name">Наташа Алексеева</strong><span class="pill">💚 ТВОЙ ХОД</span></aside>
+        <aside class="task-player-card"><span class="task-avatar-wrap"><span class="head-plumbob-anchor" aria-hidden="true"><span class="plumbob"></span></span><img id="task-player-avatar" data-player-avatar="0" alt=""></span><span>СЕЙЧАС ИГРАЕТ</span><strong id="task-player-name">Наташа Алексеева</strong><span class="pill">💚 ТВОЙ ХОД</span></aside>
         <div>
           <div class="task-panel">
             <div class="task-number-line"><span>НОВОЕ ВЗАИМОДЕЙСТВИЕ</span><span id="task-number">КАРТОЧКА № 01</span></div>
