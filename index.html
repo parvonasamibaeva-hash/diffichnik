@@ -9,7 +9,401 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Special+Elite&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <style>
+/* ВЫБЕРИ СВОЙ КОМПРОМАТ — визуальная система */
+:root {
+  --bg-main: #371F2B;
+  --bg-card: #F6E9DB;
+  --color-burgundy: #6A3446;
+  --color-gold: #D8AC89;
+  --color-cream: #F9E7D5;
+  --color-used: #6D5360;
+  --color-used-text: #D1B9BC;
+  --color-accent: #A05A6A;
+  --color-text-dark: #55293A;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Montserrat", Arial, sans-serif;
+  --font-stamp: "Special Elite", "Courier New", monospace;
+  --ease: cubic-bezier(.22,.75,.25,1);
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; background: var(--bg-main); }
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(160,90,106,.18), transparent 45%),
+    linear-gradient(135deg, #321b26 0%, var(--bg-main) 48%, #2d1923 100%);
+  overflow-x: hidden;
+}
+button, select { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, select:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+button:disabled { cursor: not-allowed; opacity: .55; }
+[hidden] { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.ambient {
+  position: fixed; pointer-events: none; z-index: 0; border-radius: 50%;
+  filter: blur(80px); opacity: .15;
+}
+.ambient-one { width: 260px; height: 260px; background: #a05a6a; top: 8%; left: -150px; }
+.ambient-two { width: 300px; height: 300px; background: #d8ac89; bottom: -200px; right: -120px; opacity: .08; }
+#app { min-height: 100vh; position: relative; z-index: 1; }
+.screen { min-height: 100vh; position: relative; }
+.screen.is-entering { animation: screen-in .48s var(--ease) both; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Интро */
+.intro-screen {
+  min-height: 100svh; display: grid; place-items: center; padding: 42px 24px;
+  overflow: hidden; isolation: isolate;
+}
+.intro-frame {
+  width: min(100%, 880px); min-height: min(760px, calc(100svh - 84px));
+  padding: clamp(34px, 6vw, 76px) 28px 32px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; position: relative;
+  border: 1px solid rgba(216,172,137,.45);
+  outline: 1px solid rgba(216,172,137,.13); outline-offset: 8px;
+  background: linear-gradient(145deg, rgba(255,255,255,.025), rgba(0,0,0,.04));
+}
+.intro-frame::before, .intro-frame::after {
+  content: ""; position: absolute; width: 54px; height: 54px; border-color: var(--color-gold); opacity: .7;
+}
+.intro-frame::before { top: 12px; left: 12px; border-top: 1px solid; border-left: 1px solid; }
+.intro-frame::after { right: 12px; bottom: 12px; border-right: 1px solid; border-bottom: 1px solid; }
+.top-secret, .eyebrow, .panel-label, .brand-kicker, .paper-label, .paper-number,
+.task-overline, .paper-bottomline, .task-header-label, .task-header-right,
+.task-footer, .game-footer, .final-topline, .final-reveal, .final-gift,
+.final-stage-note, .final-entry-kicker, .progress-caption, .intro-footer {
+  font-family: var(--font-stamp); letter-spacing: .13em;
+}
+.top-secret { color: var(--color-gold); font-size: 11px; display: flex; gap: 12px; align-items: center; }
+.tiny-star { color: var(--color-gold); font-size: 13px; }
+.separator { opacity: .5; }
+.intro-emblem { display: flex; align-items: center; gap: 18px; margin: 34px 0 19px; color: var(--color-gold); }
+.emblem-line { width: 74px; height: 1px; background: linear-gradient(90deg, transparent, var(--color-gold)); }
+.emblem-line:last-child { transform: rotate(180deg); }
+.emblem-star { font-size: 25px; text-shadow: 0 0 24px rgba(216,172,137,.65); }
+.intro-eyebrow { color: rgba(249,231,213,.62); font-size: 10px; margin: 0 0 14px; }
+.intro-screen h1 {
+  margin: 0; color: var(--color-cream); font: 600 clamp(42px, 7.6vw, 82px)/.99 var(--font-display);
+  letter-spacing: -.045em; animation: title-rise .9s .1s both;
+}
+.intro-screen h1 span { color: var(--color-gold); font-style: italic; font-weight: 500; }
+@keyframes title-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.intro-subtitle { margin: 25px 0 0; font: 500 clamp(15px, 2vw, 19px)/1.7 var(--font-body); color: var(--color-cream); animation: fade-up .8s .35s both; }
+.intro-note { margin: 18px 0 30px; color: rgba(249,231,213,.6); font: 400 12px/1.8 var(--font-body); animation: fade-up .8s .5s both; }
+@keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.button {
+  min-height: 54px; border: 0; border-radius: 2px; padding: 0 25px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 18px;
+  font-size: 10px; font-weight: 800; letter-spacing: .12em; transition: transform .25s var(--ease), background .25s, box-shadow .25s, color .25s;
+}
+.button:hover { transform: translateY(-3px); }
+.button:active { transform: translateY(-1px) scale(.99); }
+.button-gold { color: var(--color-text-dark); background: var(--color-gold); box-shadow: 0 8px 28px rgba(216,172,137,.12); }
+.button-gold:hover { background: #e8c3a5; box-shadow: 0 12px 34px rgba(216,172,137,.25); }
+.intro-button { min-width: min(330px, 100%); animation: fade-up .8s .65s both; }
+.button-arrow { font-size: 17px; font-weight: 400; }
+.intro-footer { margin-top: 54px; display: flex; align-items: center; gap: 14px; color: rgba(249,231,213,.42); font-size: 9px; }
+.footer-rule { width: 36px; height: 1px; background: rgba(216,172,137,.5); }
+.corner-mark { position: absolute; width: 22px; height: 22px; border-color: rgba(216,172,137,.35); }
+.corner-tl { top: 24px; left: 24px; border-top: 1px solid; border-left: 1px solid; }
+.corner-tr { top: 24px; right: 24px; border-top: 1px solid; border-right: 1px solid; }
+.corner-bl { bottom: 24px; left: 24px; border-bottom: 1px solid; border-left: 1px solid; }
+.corner-br { bottom: 24px; right: 24px; border-bottom: 1px solid; border-right: 1px solid; }
+
+/* Игровое поле */
+.game-screen { padding: 0 clamp(18px, 5vw, 76px) 24px; }
+.game-header {
+  max-width: 1440px; margin: 0 auto; min-height: 96px; display: flex; justify-content: space-between;
+  align-items: center; gap: 20px; border-bottom: 1px solid rgba(216,172,137,.2);
+}
+.header-brand { display: flex; align-items: center; gap: 15px; }
+.brand-seal { width: 42px; height: 42px; border: 1px solid rgba(216,172,137,.55); border-radius: 50%; display: grid; place-items: center; color: var(--color-gold); font-size: 20px; }
+.brand-kicker { margin: 0 0 6px; font-size: 9px; color: var(--color-gold); }
+.game-header h2 { margin: 0; font: 600 clamp(17px, 2.2vw, 23px)/1.1 var(--font-display); letter-spacing: .02em; }
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.icon-button { width: 40px; height: 40px; border: 1px solid rgba(216,172,137,.35); background: transparent; color: var(--color-gold); display: grid; place-items: center; cursor: pointer; transition: background .2s, border .2s; }
+.icon-button:hover { background: rgba(216,172,137,.1); border-color: var(--color-gold); }
+.icon-button svg { width: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square; }
+.text-button { background: transparent; border: 0; color: rgba(249,231,213,.55); font-size: 9px; font-weight: 700; letter-spacing: .12em; cursor: pointer; padding: 12px 0; }
+.text-button:hover { color: var(--color-gold); }
+.game-content { max-width: 1100px; margin: 0 auto; padding: 30px 0 24px; }
+.turn-panel {
+  display: flex; align-items: center; gap: 22px; padding: 17px 22px; border: 1px solid rgba(216,172,137,.28);
+  background: linear-gradient(100deg, rgba(106,52,70,.55), rgba(106,52,70,.18)); position: relative;
+}
+.turn-copy { min-width: 150px; }
+.panel-label { display: block; color: var(--color-gold); font-size: 9px; }
+.turn-copy p { margin: 6px 0 0; font: 500 13px var(--font-body); color: rgba(249,231,213,.7); }
+.select-wrap { position: relative; display: inline-flex; align-items: center; }
+.select-wrap select {
+  appearance: none; min-width: 235px; padding: 11px 38px 11px 14px; color: var(--color-cream);
+  border: 1px solid rgba(216,172,137,.45); background: rgba(55,31,43,.7); border-radius: 0;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+}
+.select-wrap select option { color: var(--color-text-dark); background: var(--color-cream); }
+.select-chevron { position: absolute; right: 13px; pointer-events: none; color: var(--color-gold); font-size: 18px; top: 5px; }
+.turn-stamp { margin-left: auto; border: 1px solid rgba(216,172,137,.5); color: var(--color-gold); width: 58px; height: 58px; transform: rotate(-8deg); display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-stamp); line-height: 1.1; }
+.turn-stamp span { font-size: 8px; letter-spacing: .1em; }
+.turn-stamp strong { font-size: 14px; font-weight: 400; letter-spacing: .08em; }
+.field-heading { display: flex; justify-content: space-between; align-items: end; margin: 35px 0 19px; gap: 20px; }
+.eyebrow { color: var(--color-gold); font-size: 9px; margin: 0 0 8px; }
+.field-heading h3 { margin: 0; font: 500 clamp(23px, 3.2vw, 34px)/1.15 var(--font-display); }
+.field-side-note { margin: 0 3px 2px 0; color: rgba(249,231,213,.47); font: 10px/1.7 var(--font-stamp); text-align: right; }
+.card-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 13px; }
+.number-card {
+  position: relative; min-height: 112px; padding: 12px; border: 1px solid rgba(216,172,137,.72); border-radius: 3px;
+  color: var(--color-text-dark); background:
+    linear-gradient(135deg, rgba(255,255,255,.45), transparent 48%),
+    var(--bg-card);
+  box-shadow: 0 8px 20px rgba(0,0,0,.12); cursor: pointer; overflow: hidden;
+  transition: transform .25s var(--ease), box-shadow .25s, background .25s, border-color .25s;
+}
+.number-card::before { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(106,52,70,.17); pointer-events: none; }
+.number-card::after { content: "✧"; position: absolute; right: 13px; top: 9px; color: rgba(106,52,70,.38); font-size: 12px; }
+.number-card:hover { transform: translateY(-5px) scale(1.015); box-shadow: 0 14px 28px rgba(0,0,0,.22); border-color: var(--color-gold); }
+.card-number { position: relative; z-index: 1; font: 600 clamp(31px, 4vw, 43px)/1 var(--font-display); }
+.card-bottom { position: absolute; left: 15px; bottom: 13px; z-index: 1; color: rgba(85,41,58,.55); font: 8px var(--font-stamp); letter-spacing: .12em; }
+.card-check { position: absolute; right: 13px; bottom: 10px; color: #b48763; font-size: 19px; z-index: 1; }
+.number-card.is-opened:not(.is-completed) { background: #ead9c9; border-color: rgba(216,172,137,.55); }
+.number-card.is-opened:not(.is-completed) .card-bottom { color: rgba(85,41,58,.75); }
+.number-card.is-completed { background: var(--color-used); color: var(--color-used-text); border-color: rgba(216,172,137,.24); box-shadow: none; }
+.number-card.is-completed::before { border-color: rgba(249,231,213,.12); }
+.number-card.is-completed::after { color: rgba(216,172,137,.6); }
+.number-card.is-completed .card-bottom { color: rgba(209,185,188,.68); }
+.card-skip-mark { position: absolute; right: 14px; top: 12px; color: var(--color-gold); font-size: 12px; z-index: 2; }
+.progress-section { margin: 24px 0 26px; }
+.progress-meta { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 9px; }
+#progress-label { color: rgba(249,231,213,.82); font-size: 11px; font-weight: 600; }
+.progress-caption { color: rgba(216,172,137,.65); font-size: 8px; }
+.progress-track { height: 3px; background: rgba(249,231,213,.13); overflow: hidden; }
+.progress-fill { display: block; height: 100%; width: 0; background: var(--color-gold); box-shadow: 0 0 12px rgba(216,172,137,.5); transition: width .45s var(--ease); }
+.final-entry {
+  border: 1px solid rgba(216,172,137,.4); padding: 17px 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 20px; background: linear-gradient(90deg, rgba(216,172,137,.08), transparent);
+}
+.final-entry-kicker { color: var(--color-gold); font-size: 9px; }
+.final-entry-copy p { margin: 6px 0 0; color: rgba(249,231,213,.65); font: 12px/1.5 var(--font-body); }
+.button-outline-gold { background: transparent; border: 1px solid var(--color-gold); color: var(--color-gold); min-height: 45px; }
+.button-outline-gold:hover { background: var(--color-gold); color: var(--color-text-dark); }
+.game-footer { max-width: 1100px; margin: 0 auto; padding-top: 18px; border-top: 1px solid rgba(216,172,137,.16); display: flex; justify-content: center; gap: 14px; color: rgba(249,231,213,.3); font-size: 8px; }
+.footer-dot { color: var(--color-gold); }
+
+/* Карточка задания */
+.task-screen { padding: 0 clamp(18px, 5vw, 76px) 24px; display: flex; flex-direction: column; }
+.task-header { max-width: 1240px; width: 100%; margin: 0 auto; min-height: 82px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(216,172,137,.2); gap: 15px; }
+.back-link { background: transparent; border: 0; color: rgba(249,231,213,.68); cursor: pointer; font-size: 9px; font-weight: 700; letter-spacing: .12em; padding: 12px 0; }
+.back-link span { color: var(--color-gold); font-size: 17px; margin-right: 8px; vertical-align: -1px; }
+.back-link:hover { color: var(--color-gold); }
+.task-header-label { color: var(--color-gold); font-size: 9px; display: flex; align-items: center; gap: 9px; }
+.task-header-right { color: rgba(249,231,213,.35); font-size: 8px; }
+.task-stage { width: min(100%, 900px); margin: auto; padding: 38px 0; }
+.task-paper {
+  position: relative; padding: clamp(28px, 5vw, 54px) clamp(22px, 6vw, 72px) 26px;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255,255,255,.52), transparent 35%),
+    linear-gradient(145deg, #f9eee3, var(--bg-card));
+  color: var(--color-text-dark); border: 1px solid rgba(216,172,137,.85);
+  box-shadow: 0 24px 70px rgba(0,0,0,.24); text-align: center;
+  animation: paper-in .48s var(--ease) both;
+}
+.task-paper::before { content: ""; position: absolute; inset: 9px; border: 1px solid rgba(106,52,70,.2); pointer-events: none; }
+.task-paper::after { content: "✦"; position: absolute; right: 24px; top: 19px; color: rgba(106,52,70,.3); font-size: 17px; }
+@keyframes paper-in { from { opacity: 0; transform: scale(.94) translateY(14px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.paper-topline { display: flex; justify-content: space-between; color: rgba(85,41,58,.55); font-size: 9px; }
+.paper-label, .paper-number { letter-spacing: .13em; }
+.paper-ornament { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 30px 0 22px; color: #b48763; }
+.paper-ornament span { width: 60px; height: 1px; background: rgba(106,52,70,.25); }
+.paper-ornament b { font-size: 20px; font-weight: 400; }
+.category-tag { display: inline-flex; align-items: center; padding: 8px 13px; border: 1px solid rgba(106,52,70,.35); color: var(--color-burgundy); font: 10px var(--font-stamp); letter-spacing: .1em; }
+.task-overline { color: rgba(85,41,58,.48); font-size: 8px; margin: 25px 0 13px; }
+.task-question { max-width: 720px; margin: 0 auto; color: var(--color-text-dark); font: 600 clamp(25px, 4vw, 42px)/1.24 var(--font-display); letter-spacing: -.02em; }
+.task-instruction { max-width: 610px; margin: 19px auto 0; color: rgba(85,41,58,.75); font: 500 13px/1.8 var(--font-body); }
+.paper-bottomline { margin-top: 37px; padding-top: 14px; border-top: 1px solid rgba(106,52,70,.18); display: flex; justify-content: space-between; gap: 12px; color: rgba(85,41,58,.42); font-size: 8px; }
+.paper-bottomline span:nth-child(2) { color: #b48763; }
+.task-controls { margin: 20px auto 0; width: min(100%, 760px); }
+.timer-panel { display: flex; align-items: center; justify-content: center; gap: 22px; margin-bottom: 18px; }
+.timer-copy { display: flex; align-items: center; gap: 12px; }
+.timer-copy .panel-label { color: rgba(249,231,213,.55); }
+.timer-copy strong { color: var(--color-gold); font: 20px var(--font-stamp); letter-spacing: .08em; min-width: 55px; }
+.timer-button { padding: 10px 13px; border: 1px solid rgba(216,172,137,.35); background: transparent; color: rgba(249,231,213,.72); font-size: 8px; font-weight: 700; letter-spacing: .1em; cursor: pointer; }
+.timer-button:hover:not(:disabled) { color: var(--color-gold); border-color: var(--color-gold); }
+.timer-button:disabled { opacity: .8; }
+.task-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.complete-button { min-width: 210px; }
+.button-muted { background: transparent; border: 1px solid rgba(249,231,213,.28); color: rgba(249,231,213,.8); }
+.button-muted:hover { border-color: var(--color-gold); color: var(--color-gold); }
+.task-hint { margin: 15px 0 0; color: rgba(249,231,213,.4); text-align: center; font-size: 10px; }
+.task-footer { width: min(100%, 1240px); margin: 0 auto; display: flex; justify-content: space-between; gap: 12px; padding-top: 17px; border-top: 1px solid rgba(216,172,137,.15); color: rgba(249,231,213,.28); font-size: 8px; }
+
+/* Финал */
+.final-screen { display: grid; place-items: center; padding: 34px 20px; background: radial-gradient(ellipse at center, rgba(106,52,70,.55), transparent 65%); }
+.final-frame {
+  width: min(100%, 900px); min-height: min(900px, calc(100svh - 68px)); padding: clamp(25px, 5vw, 58px);
+  border: 1px solid rgba(216,172,137,.45); outline: 1px solid rgba(216,172,137,.12); outline-offset: 7px;
+  text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; background: rgba(30,16,24,.25);
+}
+.final-topline { width: 100%; display: flex; justify-content: space-between; color: rgba(216,172,137,.6); font-size: 8px; }
+.final-seal { color: var(--color-gold); font-size: 30px; margin: 27px 0 20px; text-shadow: 0 0 25px rgba(216,172,137,.4); }
+.final-reveal { color: var(--color-gold); font-size: clamp(9px, 1.3vw, 11px); line-height: 1.8; opacity: 0; transform: translateY(9px); }
+.final-screen.is-active .reveal-one { animation: reveal .7s .35s forwards; }
+.final-screen.is-active .reveal-two { animation: reveal .7s 1.35s forwards; }
+.final-title { margin: 26px 0 20px; font: 600 clamp(33px, 6vw, 60px)/1.08 var(--font-display); color: var(--color-cream); letter-spacing: -.035em; opacity: 0; }
+.final-screen.is-active .reveal-three { animation: reveal .8s 2.35s forwards; }
+.final-message { max-width: 590px; color: rgba(249,231,213,.78); font: 400 14px/1.9 var(--font-body); opacity: 0; }
+.final-message p { margin: 0 0 8px; }
+.final-screen.is-active .reveal-four { animation: reveal .8s 3.15s forwards; }
+.final-gift { margin: 23px 0 0; color: var(--color-gold); font-size: 11px; letter-spacing: .1em; opacity: 0; }
+.final-gift span { color: #c67b83; font-size: 16px; margin-left: 4px; }
+.final-screen.is-active .reveal-five { animation: reveal .8s 4s forwards; }
+.final-stage-note { margin: 12px 0 0; color: rgba(249,231,213,.42); font-size: 8px; opacity: 0; }
+.final-screen.is-active .reveal-six { animation: reveal .8s 4.7s forwards; }
+.final-bottom { margin-top: 37px; padding-top: 24px; border-top: 1px solid rgba(216,172,137,.25); width: min(100%, 540px); opacity: 0; }
+.final-bottom p { margin: 0; color: var(--color-gold); font: 600 clamp(22px, 4vw, 35px)/1.15 var(--font-display); letter-spacing: .02em; }
+.final-bottom p span { color: var(--color-cream); font-style: italic; }
+.final-bottom small { display: block; margin-top: 11px; color: rgba(249,231,213,.5); font: 10px var(--font-stamp); letter-spacing: .05em; }
+.final-screen.is-active .reveal-seven { animation: reveal .8s 5.3s forwards; }
+@keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+.final-back-button { margin-top: 25px; background: transparent; border: 0; color: rgba(249,231,213,.38); font: 9px var(--font-stamp); letter-spacing: .12em; cursor: pointer; }
+.final-back-button:hover { color: var(--color-gold); }
+
+/* Диалог, уведомление */
+.confirm-modal { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgba(19,10,15,.78); backdrop-filter: blur(8px); }
+.confirm-dialog { width: min(100%, 430px); padding: 34px; background: var(--bg-card); color: var(--color-text-dark); border: 1px solid var(--color-gold); box-shadow: 0 25px 80px rgba(0,0,0,.35); text-align: center; }
+.modal-stamp { color: var(--color-accent); font: 10px var(--font-stamp); letter-spacing: .15em; }
+.confirm-dialog h2 { margin: 12px 0 8px; font: 600 30px var(--font-display); }
+.confirm-dialog p { margin: 0; color: rgba(85,41,58,.72); font-size: 12px; line-height: 1.7; }
+.modal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+.modal-actions .button { min-height: 45px; font-size: 8px; padding: 0 15px; }
+.button-danger { background: var(--color-burgundy); color: var(--color-cream); border: 1px solid var(--color-burgundy); }
+.button-danger:hover { background: #7c4054; }
+.toast { position: fixed; z-index: 30; left: 50%; bottom: 25px; transform: translate(-50%, 20px); padding: 12px 18px; background: var(--color-cream); color: var(--color-text-dark); font-size: 11px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; max-width: calc(100vw - 30px); text-align: center; }
+.toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+@media (min-width: 1500px) {
+  .game-content { max-width: 1180px; padding-top: 40px; }
+  .number-card { min-height: 128px; }
+  .card-grid { gap: 16px; }
+}
+@media (max-width: 900px) {
+  .card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .number-card { min-height: 100px; }
+  .turn-panel { gap: 14px; }
+  .turn-copy { min-width: 125px; }
+}
+@media (max-width: 620px) {
+  .intro-screen { padding: 25px 18px; }
+  .intro-frame { min-height: calc(100svh - 50px); padding: 38px 18px 25px; }
+  .top-secret { font-size: 8px; gap: 7px; }
+  .intro-emblem { margin: 27px 0 15px; }
+  .emblem-line { width: 43px; }
+  .intro-screen h1 { font-size: clamp(39px, 12vw, 58px); }
+  .intro-subtitle { font-size: 14px; margin-top: 20px; }
+  .intro-note { font-size: 10px; margin-bottom: 25px; }
+  .intro-footer { margin-top: 38px; font-size: 7px; gap: 9px; }
+  .corner-mark { width: 14px; height: 14px; }
+  .corner-tl, .corner-tr { top: 14px; }
+  .corner-bl, .corner-br { bottom: 14px; }
+  .corner-tl, .corner-bl { left: 14px; }
+  .corner-tr, .corner-br { right: 14px; }
+  .game-screen, .task-screen { padding-left: 15px; padding-right: 15px; }
+  .game-header { min-height: 76px; }
+  .brand-seal { width: 34px; height: 34px; font-size: 16px; }
+  .header-brand { gap: 9px; }
+  .brand-kicker { font-size: 7px; }
+  .game-header h2 { font-size: 15px; }
+  .header-actions { gap: 9px; }
+  .icon-button { width: 34px; height: 34px; }
+  .reset-button { max-width: 58px; line-height: 1.4; text-align: right; font-size: 7px; }
+  .game-content { padding-top: 19px; }
+  .turn-panel { padding: 13px; flex-wrap: wrap; gap: 9px 12px; }
+  .turn-copy { min-width: 0; flex: 1; }
+  .turn-copy p { font-size: 11px; }
+  .panel-label { font-size: 8px; }
+  .select-wrap { order: 3; width: 100%; }
+  .select-wrap select { width: 100%; min-width: 0; font-size: 11px; }
+  .turn-stamp { width: 43px; height: 43px; }
+  .turn-stamp span { font-size: 6px; }
+  .turn-stamp strong { font-size: 11px; }
+  .field-heading { margin: 25px 0 14px; align-items: end; }
+  .field-heading h3 { font-size: 23px; max-width: 250px; }
+  .field-side-note { font-size: 8px; }
+  .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .number-card { min-height: 91px; padding: 10px; }
+  .number-card::before { inset: 5px; }
+  .card-number { font-size: 34px; }
+  .card-bottom { left: 11px; bottom: 10px; font-size: 7px; }
+  .card-check { right: 10px; bottom: 7px; font-size: 16px; }
+  .card-skip-mark { right: 10px; top: 8px; }
+  .progress-section { margin: 18px 0 20px; }
+  #progress-label { font-size: 10px; }
+  .progress-caption { font-size: 7px; }
+  .final-entry { padding: 14px; align-items: flex-start; flex-direction: column; }
+  .final-entry-copy p { font-size: 10px; }
+  .button-outline-gold { min-height: 42px; width: 100%; }
+  .game-footer { font-size: 6px; gap: 7px; flex-wrap: wrap; }
+  .task-header { min-height: 65px; }
+  .back-link { font-size: 8px; }
+  .task-header-label { font-size: 7px; gap: 4px; }
+  .task-header-right { display: none; }
+  .task-stage { padding: 23px 0; }
+  .task-paper { padding: 27px 20px 20px; }
+  .paper-topline { font-size: 7px; }
+  .paper-ornament { margin: 24px 0 17px; }
+  .task-overline { margin: 20px 0 11px; }
+  .task-question { font-size: clamp(24px, 7.4vw, 34px); }
+  .task-instruction { font-size: 11px; }
+  .paper-bottomline { margin-top: 27px; font-size: 6px; }
+  .timer-panel { flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .timer-copy { gap: 10px; }
+  .task-actions { flex-direction: column; }
+  .task-actions .button { width: 100%; }
+  .task-hint { font-size: 9px; line-height: 1.6; }
+  .task-footer { font-size: 6px; flex-wrap: wrap; }
+  .final-screen { padding: 22px 15px; }
+  .final-frame { min-height: calc(100svh - 44px); padding: 25px 17px; }
+  .final-topline { font-size: 7px; }
+  .final-seal { margin: 20px 0 12px; }
+  .final-title { font-size: clamp(32px, 9vw, 46px); }
+  .final-message { font-size: 12px; }
+  .final-gift { font-size: 9px; line-height: 1.7; }
+  .final-stage-note { font-size: 7px; line-height: 1.6; }
+  .final-bottom { margin-top: 25px; padding-top: 18px; }
+  .final-bottom p { font-size: 27px; }
+  .final-bottom small { font-size: 8px; line-height: 1.5; }
+  .confirm-dialog { padding: 27px 20px; }
+  .modal-actions { flex-direction: column; }
+  .modal-actions .button { width: 100%; }
+}
+@media (max-width: 360px) {
+  .card-grid { gap: 6px; }
+  .number-card { min-height: 82px; }
+  .card-number { font-size: 30px; }
+  .field-heading h3 { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+  </style>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -200,6 +594,408 @@
     </div>
   </main>
 
-  <script src="script.js"></script>
+  <script>
+/* ВЫБЕРИ СВОЙ КОМПРОМАТ — игровая логика.
+   Чтобы изменить вопросы, редактируйте только массив TASKS ниже. */
+"use strict";
+
+const TASKS = [
+  { id: 1, category: "КОМПРОМАТ", question: "Какую историю обо мне ты бы рассказала Роме, если бы он заплатил тебе миллион рублей?", instruction: "Расскажи историю так, будто даёшь показания следователю." },
+  { id: 2, category: "КРИНЖ-ЗАДАНИЯ", question: "Изобрази Парвону, когда она очень хочет что-то купить, а Рома говорит, что это совершенно не нужно", instruction: "Без подготовки. Остальные угадывают, насколько точно получилось." },
+  { id: 3, category: "НЕУДОБНЫЕ ВОПРОСЫ", question: "Какая моя черта характера тебя иногда откровенно бесит, но ты уже смирилась?", instruction: "" },
+  { id: 4, category: "СЕКРЕТНЫЕ КАРТОЧКИ", question: "Какой наш общий день ты хотела бы пережить ещё раз, ничего в нём не меняя?", instruction: "" },
+  { id: 5, category: "КРИНЖ-ЗАДАНИЯ", question: "Произнеси свадебный тост в стиле российских свадеб 90-х. Обязательно упомяни детей, семейный долг и будущих внуков", instruction: "" },
+  { id: 6, category: "КОМПРОМАТ", question: "Вспомни момент, когда ты посмотрела на меня и подумала: «Господи, с кем я вообще дружу?»", instruction: "" },
+  { id: 7, category: "НЕУДОБНЫЕ ВОПРОСЫ", question: "Какой у меня самый большой ред-флаг как у подруги?", instruction: "" },
+  { id: 8, category: "СЕКРЕТНЫЕ КАРТОЧКИ", question: "Есть ли что-то, за что ты мне благодарна, но никогда не говорила об этом?", instruction: "" },
+  { id: 9, category: "КОМПРОМАТ", question: "Какую нашу общую историю невозможно рассказывать с серьёзным лицом?", instruction: "" },
+  { id: 10, category: "КРИНЖ-ЗАДАНИЯ", question: "Прорекламируй Парвону как товар с маркетплейса. Назови три достоинства, два недостатка и условия возврата", instruction: "" },
+  { id: 11, category: "СЕКРЕТНЫЕ КАРТОЧКИ", question: "В какой момент нашей дружбы тебе было особенно важно, что я рядом?", instruction: "" },
+  { id: 12, category: "НЕУДОБНЫЕ ВОПРОСЫ", question: "Что ты подумала о Роме, когда впервые его увидела? Только без красивых ответов!", instruction: "" },
+  { id: 13, category: "КРИНЖ-ЗАДАНИЯ", question: "Сыграй Парвону в трёх состояниях: когда она только проснулась, когда голодная и когда ей пришла очередная гениальная идея", instruction: "" },
+  { id: 14, category: "КОМПРОМАТ", question: "Какой мой самый нелепый поступок ты до сих пор помнишь?", instruction: "" },
+  { id: 15, category: "СЕКРЕТНЫЕ КАРТОЧКИ", question: "Какими ты представляешь нас четверых через десять лет? Где мы, что делаем и над чем смеёмся?", instruction: "" },
+  { id: 16, category: "НЕУДОБНЫЕ ВОПРОСЫ", question: "Что ты обо мне поняла раньше, чем я сама это осознала?", instruction: "" },
+  { id: 17, category: "КРИНЖ-ЗАДАНИЯ", question: "Разыграй самый нелепый семейный скандал Парвоны и Ромы. Ты играешь обе роли", instruction: "" },
+  { id: 18, category: "КОМПРОМАТ", question: "Какой эпизод из наших студенческих лет пришлось бы вырезать из фильма, чтобы он прошёл цензуру?", instruction: "" },
+  { id: 19, category: "НЕУДОБНЫЕ ВОПРОСЫ", question: "Какой самый нелепый совет ты могла бы дать Роме перед свадьбой, чтобы он был готов к жизни со мной?", instruction: "" },
+  { id: 20, category: "СЕКРЕТНЫЕ КАРТОЧКИ", question: "Что во мне с годами изменилось, а что, к счастью, осталось прежним?", instruction: "" }
+];
+
+const PLAYERS = ["Наташа Алексеева", "Наташа Ананьева", "Катя Русакова"];
+const STORAGE_KEY = "parvona-kompromat-game-v1";
+
+const DEFAULT_STATE = {
+  completedIds: [],
+  openedIds: [],
+  skippedIds: [],
+  currentPlayerIndex: 0,
+  currentCardId: null,
+  screen: "intro"
+};
+
+let state = loadState();
+let timerInterval = null;
+let timerRemaining = 30;
+let toastTimeout = null;
+let previousFocus = null;
+
+const screens = {
+  intro: document.getElementById("intro-screen"),
+  game: document.getElementById("game-screen"),
+  task: document.getElementById("task-screen"),
+  final: document.getElementById("final-screen")
+};
+
+const el = {
+  start: document.getElementById("start-button"),
+  grid: document.getElementById("card-grid"),
+  progressLabel: document.getElementById("progress-label"),
+  progressFill: document.getElementById("progress-fill"),
+  progressTrack: document.getElementById("progress-track"),
+  playerSelect: document.getElementById("player-select"),
+  taskNumber: document.getElementById("task-number"),
+  taskCategory: document.getElementById("task-category"),
+  taskQuestion: document.getElementById("task-question"),
+  taskInstruction: document.getElementById("task-instruction"),
+  taskStatus: document.getElementById("task-status"),
+  complete: document.getElementById("complete-button"),
+  skip: document.getElementById("skip-button"),
+  back: document.getElementById("back-to-field"),
+  timerDisplay: document.getElementById("timer-display"),
+  timerButton: document.getElementById("timer-button"),
+  fullscreen: document.getElementById("fullscreen-button"),
+  reset: document.getElementById("reset-button"),
+  modal: document.getElementById("confirm-modal"),
+  cancelReset: document.getElementById("cancel-reset"),
+  confirmReset: document.getElementById("confirm-reset"),
+  openFinal: document.getElementById("open-final-button"),
+  finalBack: document.getElementById("final-back-button"),
+  toast: document.getElementById("toast")
+};
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved || typeof saved !== "object") return { ...DEFAULT_STATE };
+    const validIds = (items) => Array.isArray(items) ? [...new Set(items.filter(id => Number.isInteger(id) && id >= 1 && id <= TASKS.length))] : [];
+    return {
+      completedIds: validIds(saved.completedIds),
+      openedIds: validIds(saved.openedIds),
+      skippedIds: validIds(saved.skippedIds),
+      currentPlayerIndex: Number.isInteger(saved.currentPlayerIndex) && saved.currentPlayerIndex >= 0 && saved.currentPlayerIndex < PLAYERS.length ? saved.currentPlayerIndex : 0,
+      currentCardId: Number.isInteger(saved.currentCardId) && saved.currentCardId >= 1 && saved.currentCardId <= TASKS.length ? saved.currentCardId : null,
+      screen: ["intro", "game", "task", "final"].includes(saved.screen) ? saved.screen : "intro"
+    };
+  } catch (error) {
+    console.warn("Не удалось прочитать сохранённую игру:", error);
+    return { ...DEFAULT_STATE };
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.warn("Не удалось сохранить прогресс:", error);
+  }
+}
+
+function showScreen(name, { pushHistory = true, focus = true } = {}) {
+  if (!screens[name]) name = "game";
+  Object.entries(screens).forEach(([key, screen]) => {
+    const active = key === name;
+    screen.hidden = !active;
+    screen.classList.toggle("is-active", active);
+    screen.classList.remove("is-entering");
+    if (active) {
+      // Перезапуск CSS-перехода при смене экрана.
+      void screen.offsetWidth;
+      screen.classList.add("is-entering");
+    }
+  });
+  state.screen = name;
+  if (pushHistory) {
+    try { history.pushState({ appScreen: name }, "", `#${name}`); } catch (_) {}
+  }
+  saveState();
+  stopTimer();
+  if (name === "game") renderGame();
+  if (name === "task") renderTask();
+  if (focus) {
+    window.setTimeout(() => {
+      if (name === "game") el.grid.querySelector("button")?.focus({ preventScroll: true });
+      if (name === "task") el.taskQuestion.focus({ preventScroll: true });
+      if (name === "final") el.finalBack.focus({ preventScroll: true });
+    }, 80);
+  }
+}
+
+function renderGame() {
+  el.grid.innerHTML = "";
+  TASKS.forEach(task => {
+    const isCompleted = state.completedIds.includes(task.id);
+    const isOpened = state.openedIds.includes(task.id);
+    const isSkipped = state.skippedIds.includes(task.id);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "number-card";
+    if (isOpened) button.classList.add("is-opened");
+    if (isCompleted) button.classList.add("is-completed");
+    button.setAttribute("aria-label", `Карточка ${task.id}${isCompleted ? ", выполнена" : isOpened ? ", уже открывалась" : ", закрыта"}`);
+    const number = document.createElement("span");
+    number.className = "card-number";
+    number.textContent = String(task.id).padStart(2, "0");
+    const bottom = document.createElement("span");
+    bottom.className = "card-bottom";
+    bottom.textContent = isCompleted ? "ЗАКРЫТО" : isOpened ? "УЖЕ ОТКРЫВАЛИ" : "ДОСЬЕ";
+    button.append(number, bottom);
+    if (isSkipped && !isCompleted) {
+      const skipMark = document.createElement("span");
+      skipMark.className = "card-skip-mark";
+      skipMark.textContent = "↻";
+      skipMark.setAttribute("aria-label", "Отложено");
+      button.append(skipMark);
+    }
+    if (isCompleted) {
+      const check = document.createElement("span");
+      check.className = "card-check";
+      check.textContent = "✓";
+      check.setAttribute("aria-hidden", "true");
+      button.append(check);
+    }
+    button.addEventListener("click", () => openTask(task.id));
+    el.grid.append(button);
+  });
+
+  const openedCount = state.openedIds.length;
+  el.progressLabel.textContent = `Открыто ${openedCount} из ${TASKS.length} карточек`;
+  el.progressFill.style.width = `${(openedCount / TASKS.length) * 100}%`;
+  el.progressTrack.setAttribute("aria-valuenow", String(openedCount));
+  el.playerSelect.value = String(state.currentPlayerIndex);
+}
+
+function openTask(id) {
+  const task = TASKS.find(item => item.id === id);
+  if (!task) return;
+  state.currentCardId = id;
+  if (!state.openedIds.includes(id)) state.openedIds.push(id);
+  state.skippedIds = state.skippedIds.filter(item => item !== id);
+  saveState();
+  showScreen("task");
+}
+
+function renderTask() {
+  const task = TASKS.find(item => item.id === state.currentCardId);
+  if (!task) {
+    showScreen("game", { pushHistory: false });
+    return;
+  }
+  el.taskNumber.textContent = `КАРТОЧКА № ${String(task.id).padStart(2, "0")}`;
+  el.taskCategory.textContent = task.category;
+  el.taskQuestion.textContent = task.question;
+  el.taskInstruction.textContent = task.instruction;
+  el.taskInstruction.hidden = !task.instruction;
+  const completed = state.completedIds.includes(task.id);
+  el.taskStatus.textContent = completed ? "УЖЕ ВЫПОЛНЕНО" : "ИСТОРИЯ ОЖИДАЕТ";
+  el.complete.innerHTML = completed ? 'УЖЕ ВЫПОЛНЕНО <span aria-hidden="true">✓</span>' : 'ВЫПОЛНЕНО <span aria-hidden="true">✓</span>';
+  resetTimerDisplay();
+}
+
+function completeTask() {
+  const id = state.currentCardId;
+  if (!id) return;
+  const wasCompleted = state.completedIds.includes(id);
+  if (!wasCompleted) {
+    state.completedIds.push(id);
+    state.skippedIds = state.skippedIds.filter(item => item !== id);
+    state.currentPlayerIndex = (state.currentPlayerIndex + 1) % PLAYERS.length;
+    showToast(`Следующий ход: ${PLAYERS[state.currentPlayerIndex]}`);
+  } else {
+    showToast("Эта карточка уже отмечена как выполненная.");
+  }
+  state.currentCardId = null;
+  saveState();
+  showScreen("game");
+}
+
+function skipTask() {
+  const id = state.currentCardId;
+  if (!id) return;
+  if (!state.completedIds.includes(id) && !state.skippedIds.includes(id)) state.skippedIds.push(id);
+  state.currentCardId = null;
+  saveState();
+  showScreen("game");
+  showToast("Карточка отложена. К ней можно вернуться позже.");
+}
+
+function returnToField() {
+  state.currentCardId = null;
+  saveState();
+  showScreen("game");
+}
+
+function showToast(message) {
+  el.toast.textContent = message;
+  el.toast.classList.add("is-visible");
+  window.clearTimeout(toastTimeout);
+  toastTimeout = window.setTimeout(() => el.toast.classList.remove("is-visible"), 2600);
+}
+
+function stopTimer() {
+  if (timerInterval) window.clearInterval(timerInterval);
+  timerInterval = null;
+  timerRemaining = 30;
+  if (el.timerButton) {
+    el.timerButton.disabled = false;
+    el.timerButton.textContent = "ЗАПУСТИТЬ 30 СЕКУНД";
+  }
+  if (el.timerDisplay) el.timerDisplay.textContent = "00:30";
+}
+
+function resetTimerDisplay() {
+  stopTimer();
+}
+
+function startTimer() {
+  if (timerInterval) return;
+  timerRemaining = 30;
+  el.timerButton.disabled = true;
+  el.timerButton.textContent = "ТАЙМЕР ИДЁТ";
+  updateTimer();
+  timerInterval = window.setInterval(() => {
+    timerRemaining -= 1;
+    updateTimer();
+    if (timerRemaining <= 0) {
+      window.clearInterval(timerInterval);
+      timerInterval = null;
+      el.timerButton.disabled = false;
+      el.timerButton.textContent = "ЗАПУСТИТЬ ЕЩЁ РАЗ";
+      showToast("Время вышло. Но история может продолжаться!");
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  const seconds = Math.max(0, timerRemaining);
+  el.timerDisplay.textContent = `00:${String(seconds).padStart(2, "0")}`;
+}
+
+function openResetModal() {
+  previousFocus = document.activeElement;
+  el.modal.hidden = false;
+  el.cancelReset.focus();
+}
+
+function closeResetModal() {
+  el.modal.hidden = true;
+  previousFocus?.focus?.();
+}
+
+function resetGame() {
+  state = { ...DEFAULT_STATE };
+  saveState();
+  closeResetModal();
+  showScreen("intro");
+  showToast("Досье очищено. Можно начинать заново.");
+}
+
+async function toggleFullscreen() {
+  try {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen();
+      el.fullscreen.setAttribute("aria-label", "Выйти из полноэкранного режима");
+      el.fullscreen.title = "Выйти из полноэкранного режима";
+    } else {
+      await document.exitFullscreen();
+      el.fullscreen.setAttribute("aria-label", "Включить полноэкранный режим");
+      el.fullscreen.title = "Полноэкранный режим";
+    }
+  } catch (error) {
+    showToast("Полноэкранный режим недоступен в этом браузере.");
+  }
+}
+
+function openFinal() {
+  state.currentCardId = null;
+  saveState();
+  showScreen("final");
+}
+
+function handlePopState(event) {
+  const requested = event.state?.appScreen;
+  if (requested === "task" && state.currentCardId) {
+    showScreen("task", { pushHistory: false, focus: false });
+  } else if (requested === "final") {
+    showScreen("final", { pushHistory: false, focus: false });
+  } else if (requested === "game" || requested === "intro") {
+    state.currentCardId = null;
+    showScreen(requested, { pushHistory: false, focus: false });
+  } else if (state.screen === "task") {
+    state.currentCardId = null;
+    showScreen("game", { pushHistory: false, focus: false });
+  } else {
+    showScreen("game", { pushHistory: false, focus: false });
+  }
+}
+
+function init() {
+  el.start.addEventListener("click", () => showScreen("game"));
+  el.back.addEventListener("click", returnToField);
+  el.complete.addEventListener("click", completeTask);
+  el.skip.addEventListener("click", skipTask);
+  el.timerButton.addEventListener("click", startTimer);
+  el.playerSelect.addEventListener("change", event => {
+    const nextIndex = Number(event.target.value);
+    if (Number.isInteger(nextIndex) && PLAYERS[nextIndex]) {
+      state.currentPlayerIndex = nextIndex;
+      saveState();
+      showToast(`Теперь ходит: ${PLAYERS[nextIndex]}`);
+    }
+  });
+  el.fullscreen.addEventListener("click", toggleFullscreen);
+  document.addEventListener("fullscreenchange", () => {
+    const active = Boolean(document.fullscreenElement);
+    el.fullscreen.setAttribute("aria-label", active ? "Выйти из полноэкранного режима" : "Включить полноэкранный режим");
+    el.fullscreen.title = active ? "Выйти из полноэкранного режима" : "Полноэкранный режим";
+  });
+  el.reset.addEventListener("click", openResetModal);
+  el.cancelReset.addEventListener("click", closeResetModal);
+  el.confirmReset.addEventListener("click", resetGame);
+  el.modal.addEventListener("click", event => {
+    if (event.target === el.modal) closeResetModal();
+  });
+  el.openFinal.addEventListener("click", openFinal);
+  el.finalBack.addEventListener("click", () => showScreen("game"));
+  window.addEventListener("popstate", handlePopState);
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      if (!el.modal.hidden) {
+        closeResetModal();
+      } else if (state.screen === "task") {
+        returnToField();
+      } else if (state.screen === "final") {
+        showScreen("game");
+      }
+    }
+  });
+
+  renderGame();
+
+  // Возвращаемся к текущему делу, если страницу обновили во время вопроса.
+  if (state.screen === "task" && state.currentCardId) {
+    showScreen("task", { pushHistory: false, focus: false });
+  } else if (state.screen === "final") {
+    showScreen("final", { pushHistory: false, focus: false });
+  } else if (state.screen === "game") {
+    showScreen("game", { pushHistory: false, focus: false });
+  } else {
+    showScreen("intro", { pushHistory: false, focus: false });
+  }
+}
+
+init();
+
+  </script>
 </body>
 </html>
