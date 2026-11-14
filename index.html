@@ -268,6 +268,86 @@
     .toast { position:fixed; z-index:40; left:50%; bottom:22px; transform:translate(-50%,18px); opacity:0; pointer-events:none; padding:12px 18px; max-width:calc(100vw - 28px); border-radius:99px; background:#effff2; color:#28653b; box-shadow:0 10px 30px rgba(0,0,0,.25); font-size:11px; font-weight:1000; text-align:center; transition:opacity .25s,transform .25s; }
     .toast.is-visible { opacity:1; transform:translate(-50%,0); }
 
+
+    /* Коллекция достижений: отдельный журнал, который переживает сброс игры */
+    .achievement-library-button { white-space:nowrap; }
+    .achievement-count {
+      display:inline-grid; place-items:center; min-width:34px; height:22px; padding:0 7px;
+      border-radius:99px; color:#247d40; background:#e4ffe9; font-size:9px; font-weight:1000;
+    }
+    .achievements-modal {
+      position:fixed; inset:0; z-index:50; display:grid; place-items:center;
+      padding:18px; background:rgba(13,18,38,.76); backdrop-filter:blur(10px);
+    }
+    .achievements-dialog {
+      width:min(760px,100%); max-height:min(88svh,850px); overflow:hidden;
+      display:flex; flex-direction:column; border-radius:28px; color:var(--ink);
+      background:linear-gradient(145deg,#fffdf8,#eeedff 62%,#e9fff0);
+      border:1px solid rgba(255,255,255,.96); box-shadow:0 28px 90px rgba(0,0,0,.4);
+    }
+    .achievements-header {
+      display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
+      padding:24px 26px 17px; border-bottom:1px solid rgba(92,102,145,.13);
+    }
+    .achievements-heading { margin:0; color:#2d3856; font-size:clamp(23px,4vw,31px); line-height:1.05; font-weight:1000; letter-spacing:-.04em; }
+    .achievements-subtitle { margin:7px 0 0; color:#7c849e; font-size:11px; line-height:1.5; font-weight:800; }
+    .achievements-close {
+      flex:0 0 34px; width:34px; height:34px; border:0; border-radius:50%;
+      color:#69728b; background:rgba(87,99,143,.1); cursor:pointer; font-size:22px; line-height:1;
+    }
+    .achievements-summary {
+      display:flex; align-items:center; gap:13px; margin:16px 22px 12px; padding:13px 15px;
+      border:1px solid #ccefd4; border-radius:17px; background:linear-gradient(100deg,#e8fff0,#f7fff9);
+    }
+    .achievements-summary .plumbob { width:19px; height:30px; }
+    .achievements-summary-copy { min-width:0; flex:1; }
+    .achievements-summary-copy strong { display:block; color:#287c42; font-size:13px; font-weight:1000; }
+    .achievements-summary-copy span { display:block; margin-top:2px; color:#6f8b78; font-size:9px; font-weight:800; }
+    .achievements-summary-count { color:#26994b; font-size:20px; font-weight:1000; font-variant-numeric:tabular-nums; }
+    .achievement-list {
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;
+      overflow:auto; padding:2px 22px 18px; overscroll-behavior:contain;
+    }
+    .achievement-entry {
+      min-width:0; display:grid; grid-template-columns:42px minmax(0,1fr); align-items:center; gap:11px;
+      padding:12px; border:1px solid rgba(113,120,159,.14); border-radius:16px;
+      background:rgba(255,255,255,.72);
+    }
+    .achievement-entry.is-unlocked {
+      border-color:#bfe9c9; background:linear-gradient(135deg,#f4fff5,#fff 75%);
+      box-shadow:0 5px 15px rgba(55,169,83,.08);
+    }
+    .achievement-entry-icon {
+      width:42px; height:42px; display:grid; place-items:center; border-radius:14px;
+      color:#9aa0b1; background:#e8e9f1; font-size:20px; filter:grayscale(.85);
+    }
+    .achievement-entry.is-unlocked .achievement-entry-icon {
+      color:#238c45; background:linear-gradient(145deg,#e2ffb7,#76e76b);
+      filter:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 4px 10px rgba(51,180,76,.14);
+    }
+    .achievement-entry-copy { min-width:0; }
+    .achievement-entry-copy strong { display:block; color:#303b59; font-size:11px; line-height:1.25; font-weight:1000; }
+    .achievement-entry-copy p { margin:4px 0 0; color:#77809a; font-size:9px; line-height:1.4; font-weight:700; }
+    .achievement-entry-status { display:block; margin-top:5px; color:#9a9fb0; font-size:7px; font-weight:1000; letter-spacing:.09em; text-transform:uppercase; }
+    .achievement-entry.is-unlocked .achievement-entry-status { color:#29934a; }
+    .achievements-footer {
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding:14px 22px 20px; border-top:1px solid rgba(92,102,145,.13); background:rgba(255,255,255,.36);
+    }
+    .achievements-footnote { margin:0; max-width:340px; color:#8b91a7; font-size:8px; line-height:1.5; font-weight:700; }
+    @media (max-width:600px) {
+      .game-topbar { flex-wrap:wrap; padding:10px 0; }
+      .topbar-right { flex-wrap:wrap; justify-content:flex-end; gap:6px; }
+      .achievement-library-button { min-height:36px; padding:0 10px; font-size:8px; }
+      .achievements-modal { padding:9px; }
+      .achievements-dialog { max-height:94svh; border-radius:21px; }
+      .achievements-header { padding:19px 17px 13px; }
+      .achievements-summary { margin:12px 14px 10px; }
+      .achievement-list { grid-template-columns:1fr; padding:2px 14px 14px; gap:8px; }
+      .achievements-footer { padding:12px 14px 15px; }
+      .achievements-footnote { max-width:100%; }
+    }
+
     /* Всплывающие достижения в стиле уведомлений The Sims */
     .achievement-notification {
       position:fixed; z-index:60; top:22px; right:22px; width:min(390px,calc(100vw - 28px));
@@ -511,7 +591,7 @@
     <section class="screen game-screen" id="game-screen" aria-labelledby="game-title" hidden>
       <header class="game-topbar">
         <div class="sim-logo"><span class="plumbob" aria-hidden="true"></span><span class="sim-logo-word">THE SIMS<small>ДЕВИЧНИК · PARVONA EDITION</small></span></div>
-        <div class="topbar-right"><span class="topbar-chip">💚 СОХРАНЕНИЕ АКТИВНО</span><button class="button button-ghost button-small" id="fullscreen-button" type="button" aria-label="Включить полноэкранный режим" title="Полноэкранный режим">⛶ ЭКРАН</button></div>
+        <div class="topbar-right"><span class="topbar-chip">💚 СОХРАНЕНИЕ АКТИВНО</span><button class="button button-light button-small achievement-library-button" id="achievements-button" type="button" aria-haspopup="dialog" aria-controls="achievements-modal">🏆 ДОСТИЖЕНИЯ <span class="achievement-count" id="achievement-count">0/10</span></button><button class="button button-ghost button-small" id="fullscreen-button" type="button" aria-label="Включить полноэкранный режим" title="Полноэкранный режим">⛶ ЭКРАН</button></div>
       </header>
       <div class="game-shell">
         <aside class="sidebar">
@@ -585,7 +665,7 @@
         <p class="achievement-small">СЕЙЧАС НЕВЕСТА ВРУЧАЕТ ЛИЧНЫЕ ПИСЬМА</p>
         <p class="achievement-slogan">ФАМИЛИЮ СМЕНИТЬ МОЖНО.<br><span>ДРУЖБУ — НЕТ.</span></p>
         <p class="achievement-small">Членство в клубе девичьих фамилий бессрочное.</p>
-        <button class="final-back-button" id="final-back-button" type="button">← ВЕРНУТЬСЯ К ИГРЕ</button>
+        <button class="button button-light button-small" type="button" data-open-achievements>🏆 МОИ ДОСТИЖЕНИЯ</button><button class="final-back-button" id="final-back-button" type="button">← ВЕРНУТЬСЯ К ИГРЕ</button>
       </div>
     </section>
 
@@ -601,7 +681,32 @@
       <button class="achievement-notification-close" id="achievement-notification-close" type="button" aria-label="Закрыть уведомление">×</button>
       <span class="achievement-notification-progress" id="achievement-notification-progress" aria-hidden="true"></span>
     </div>
-    <div class="confirm-modal" id="confirm-modal" hidden><div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description"><span class="pill">⚠️ ПОДТВЕРЖДЕНИЕ</span><h2 id="confirm-title">Начать заново?</h2><p id="confirm-description">Прогресс, отметки и очередь участниц будут сброшены.</p><div class="modal-actions"><button class="button button-light" id="cancel-reset" type="button">ОСТАВИТЬ КАК ЕСТЬ</button><button class="button button-green" id="confirm-reset" type="button">СБРОСИТЬ</button></div></div></div>
+    <div class="achievements-modal" id="achievements-modal" hidden>
+      <section class="achievements-dialog" role="dialog" aria-modal="true" aria-labelledby="achievements-title" aria-describedby="achievements-description">
+        <header class="achievements-header">
+          <div>
+            <p class="eyebrow">PARVONA SIMS EDITION · КОЛЛЕКЦИЯ</p>
+            <h2 class="achievements-heading" id="achievements-title">МОИ ДОСТИЖЕНИЯ</h2>
+            <p class="achievements-subtitle" id="achievements-description">Все награды, которые вы открыли во время девичника. Они останутся здесь даже после сброса игры.</p>
+          </div>
+          <button class="achievements-close" id="achievements-close" type="button" aria-label="Закрыть достижения">×</button>
+        </header>
+        <div class="achievements-summary">
+          <span class="plumbob" aria-hidden="true"></span>
+          <div class="achievements-summary-copy"><strong>ТВОЯ КОЛЛЕКЦИЯ НАГРАД</strong><span>Каждое достижение сохраняется отдельно от игрового прогресса</span></div>
+          <strong class="achievements-summary-count" id="achievements-summary-count">0/10</strong>
+        </div>
+        <div class="achievement-list" id="achievement-list" aria-live="polite"></div>
+        <footer class="achievements-footer">
+          <p class="achievements-footnote">Коллекция хранится в этом браузере. Чтобы оставить себе отдельную копию, скачай историю достижений.</p>
+          <div class="modal-actions" style="margin:0">
+            <button class="button button-light button-small" id="export-achievements" type="button">⬇ СКАЧАТЬ ИСТОРИЮ</button>
+            <button class="button button-green button-small" id="achievements-done" type="button">ГОТОВО</button>
+          </div>
+        </footer>
+      </section>
+    </div>
+    <div class="confirm-modal" id="confirm-modal" hidden><div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description"><span class="pill">⚠️ ПОДТВЕРЖДЕНИЕ</span><h2 id="confirm-title">Начать заново?</h2><p id="confirm-description">Прогресс, отметки и очередь участниц будут сброшены. Коллекция уже полученных достижений останется.</p><div class="modal-actions"><button class="button button-light" id="cancel-reset" type="button">ОСТАВИТЬ КАК ЕСТЬ</button><button class="button button-green" id="confirm-reset" type="button">СБРОСИТЬ</button></div></div></div>
   </main>
 
   <script>
@@ -656,8 +761,17 @@
       { id: "secret-final", title: "Секретный финал открыт", description: "Последний сюрприз разблокирован. Время обниматься!" }
     ];
     const STORAGE_KEY = "parvona-kompromat-game-v1";
+    const ACHIEVEMENT_STORAGE_KEY = "parvona-kompromat-achievement-archive-v1";
     const DEFAULT_STATE = { completedIds: [], openedIds: [], skippedIds: [], unlockedAchievementIds: [], currentPlayerIndex: 0, currentCardId: null, screen: "intro" };
     let state = loadState();
+    let achievementArchive = loadAchievementArchive();
+    // Переносим награды из старой версии сохранения в отдельную постоянную коллекцию.
+    state.unlockedAchievementIds.forEach(id => {
+      if (!achievementArchive.some(item => item.id === id)) achievementArchive.push({ id, unlockedAt: null });
+    });
+    state.unlockedAchievementIds = achievementArchive.map(item => item.id);
+    saveAchievementArchive();
+    saveState();
     let timerInterval = null;
     let timerRemaining = 30;
     let toastTimeout = null;
@@ -688,6 +802,10 @@
       back: document.getElementById("back-to-field"), timerDisplay: document.getElementById("timer-display"),
       timerButton: document.getElementById("timer-button"), fullscreen: document.getElementById("fullscreen-button"),
       reset: document.getElementById("reset-button"), modal: document.getElementById("confirm-modal"),
+      achievementsButton: document.getElementById("achievements-button"), achievementsModal: document.getElementById("achievements-modal"),
+      achievementsClose: document.getElementById("achievements-close"), achievementsDone: document.getElementById("achievements-done"),
+      achievementList: document.getElementById("achievement-list"), achievementCount: document.getElementById("achievement-count"),
+      achievementsSummaryCount: document.getElementById("achievements-summary-count"), exportAchievements: document.getElementById("export-achievements"),
       cancelReset: document.getElementById("cancel-reset"), confirmReset: document.getElementById("confirm-reset"),
       random: document.getElementById("random-card-button"), openFinal: document.getElementById("open-final-button"),
       finalBack: document.getElementById("final-back-button"), toast: document.getElementById("toast"),
@@ -698,6 +816,111 @@
       achievementProgress: document.getElementById("achievement-notification-progress"),
       achievementClose: document.getElementById("achievement-notification-close")
     };
+
+    function loadAchievementArchive() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(ACHIEVEMENT_STORAGE_KEY));
+        if (!Array.isArray(saved)) return [];
+        const valid = saved.filter(item => item && typeof item.id === "string" && ACHIEVEMENTS.some(a => a.id === item.id));
+        const unique = new Map();
+        valid.forEach(item => {
+          if (!unique.has(item.id)) unique.set(item.id, { id: item.id, unlockedAt: typeof item.unlockedAt === "string" ? item.unlockedAt : null });
+        });
+        return [...unique.values()];
+      } catch (error) {
+        console.warn("Не удалось прочитать коллекцию достижений:", error);
+        return [];
+      }
+    }
+    function saveAchievementArchive() {
+      try { localStorage.setItem(ACHIEVEMENT_STORAGE_KEY, JSON.stringify(achievementArchive)); }
+      catch (error) { console.warn("Не удалось сохранить коллекцию достижений:", error); }
+    }
+    function recordAchievement(id) {
+      if (!ACHIEVEMENTS.some(item => item.id === id)) return;
+      if (!achievementArchive.some(item => item.id === id)) {
+        achievementArchive.push({ id, unlockedAt: new Date().toISOString() });
+        saveAchievementArchive();
+      }
+      if (!state.unlockedAchievementIds.includes(id)) state.unlockedAchievementIds.push(id);
+      saveState();
+      updateAchievementCounter();
+    }
+    function achievementDateLabel(value) {
+      if (!value) return "Получено ранее";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "Получено ранее";
+      return "Получено · " + new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(date);
+    }
+    function renderAchievements() {
+      const unlocked = new Set(achievementArchive.map(item => item.id));
+      const dates = new Map(achievementArchive.map(item => [item.id, item.unlockedAt]));
+      el.achievementList.innerHTML = "";
+      ACHIEVEMENTS.forEach((achievement, index) => {
+        const isUnlocked = unlocked.has(achievement.id);
+        const entry = document.createElement("article");
+        entry.className = `achievement-entry${isUnlocked ? " is-unlocked" : ""}`;
+        const icon = document.createElement("span");
+        icon.className = "achievement-entry-icon";
+        icon.textContent = ["🌱", "🦋", "🕵️", "🎉", "👑", "📸", "🎭", "💬", "💗", "💚"][index] || "🏆";
+        icon.setAttribute("aria-hidden", "true");
+        const copy = document.createElement("div");
+        copy.className = "achievement-entry-copy";
+        const title = document.createElement("strong");
+        title.textContent = achievement.title;
+        const description = document.createElement("p");
+        description.textContent = achievement.description;
+        const status = document.createElement("span");
+        status.className = "achievement-entry-status";
+        status.textContent = isUnlocked ? achievementDateLabel(dates.get(achievement.id)) : "Ещё не получено";
+        copy.append(title, description, status);
+        entry.append(icon, copy);
+        el.achievementList.append(entry);
+      });
+      updateAchievementCounter();
+    }
+    function updateAchievementCounter() {
+      const count = achievementArchive.length;
+      const label = `${count}/${ACHIEVEMENTS.length}`;
+      if (el.achievementCount) el.achievementCount.textContent = label;
+      if (el.achievementsSummaryCount) el.achievementsSummaryCount.textContent = label;
+    }
+    function openAchievements() {
+      previousFocus = document.activeElement;
+      renderAchievements();
+      el.achievementsModal.hidden = false;
+      el.achievementsClose.focus();
+    }
+    function closeAchievements() {
+      el.achievementsModal.hidden = true;
+      previousFocus?.focus?.();
+    }
+    function exportAchievementHistory() {
+      const unlocked = ACHIEVEMENTS.filter(item => achievementArchive.some(record => record.id === item.id));
+      const lines = [
+        "THE SIMS · PARVONA EDITION",
+        "ИСТОРИЯ ДОСТИЖЕНИЙ ДЕВИЧНИКА",
+        `Сохранено: ${new Intl.DateTimeFormat("ru-RU", { dateStyle: "long", timeStyle: "short" }).format(new Date())}`,
+        `Получено достижений: ${unlocked.length} из ${ACHIEVEMENTS.length}`,
+        "",
+        ...(unlocked.length ? unlocked.map((item, index) => {
+          const record = achievementArchive.find(entry => entry.id === item.id);
+          return `${index + 1}. ${item.title}\n   ${item.description}\n   ${achievementDateLabel(record?.unlockedAt)}`;
+        }) : ["Пока не получено ни одного достижения. Самое время начать игру!"]),
+        "",
+        "Фамилию сменить можно. Дружбу — нет."
+      ];
+      const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "Sims-ispytanie-dostizheniya.txt";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast("История достижений сохранена в файл 💚");
+    }
 
     function loadState() {
       try {
@@ -896,8 +1119,8 @@
       const newlyUnlocked = [];
       ids.forEach(id => {
         const achievement = ACHIEVEMENTS.find(item => item.id === id);
-        if (achievement && !state.unlockedAchievementIds.includes(id)) {
-          state.unlockedAchievementIds.push(id);
+        if (achievement && !achievementArchive.some(item => item.id === id)) {
+          recordAchievement(id);
           newlyUnlocked.push(achievement);
         }
       });
@@ -941,7 +1164,7 @@
     function openResetModal() { previousFocus = document.activeElement; el.modal.hidden = false; el.cancelReset.focus(); }
     function closeResetModal() { el.modal.hidden = true; previousFocus?.focus?.(); }
     function resetGame() {
-      state = { ...DEFAULT_STATE, completedIds: [], openedIds: [], skippedIds: [], unlockedAchievementIds: [] };
+      state = { ...DEFAULT_STATE, completedIds: [], openedIds: [], skippedIds: [], unlockedAchievementIds: achievementArchive.map(item => item.id) };
       saveState(); closeResetModal(); showScreen("intro"); showToast("Новое сохранение создано. Поехали! ✨");
     }
     async function toggleFullscreen() {
@@ -966,6 +1189,7 @@
       else showScreen("game", { pushHistory: false, focus: false });
     }
     function init() {
+      updateAchievementCounter();
       setAvatarSources();
       el.start.addEventListener("click", () => showScreen("game"));
       el.back.addEventListener("click", returnToField);
@@ -994,10 +1218,17 @@
       el.openFinal.addEventListener("click", openFinal);
       el.finalBack.addEventListener("click", () => showScreen("game"));
       el.achievementClose.addEventListener("click", dismissAchievementNotification);
+      el.achievementsButton.addEventListener("click", openAchievements);
+      el.achievementsClose.addEventListener("click", closeAchievements);
+      el.achievementsDone.addEventListener("click", closeAchievements);
+      el.achievementsModal.addEventListener("click", event => { if (event.target === el.achievementsModal) closeAchievements(); });
+      document.querySelectorAll("[data-open-achievements]").forEach(button => button.addEventListener("click", openAchievements));
+      el.exportAchievements.addEventListener("click", exportAchievementHistory);
       window.addEventListener("popstate", handlePopState);
       document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
-          if (!el.modal.hidden) closeResetModal();
+          if (!el.achievementsModal.hidden) closeAchievements();
+          else if (!el.modal.hidden) closeResetModal();
           else if (state.screen === "task") returnToField();
           else if (state.screen === "final") showScreen("game");
         }
