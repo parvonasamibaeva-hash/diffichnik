@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#371F2B">
+  <meta name="description" content="Секретное досье девичника Парвоны. Выбери свой компромат.">
+  <title>Выбери свой компромат — Девичник 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <main id="app">
+    <!-- Первый экран -->
+    <section class="screen intro-screen is-active" id="intro-screen" aria-labelledby="intro-title">
+      <div class="intro-frame">
+        <div class="top-secret"><span class="tiny-star">✦</span> ДЕВИЧНИК 2026 <span class="separator">·</span> СЕКРЕТНОЕ ДОСЬЕ <span class="tiny-star">✦</span></div>
+        <div class="intro-emblem" aria-hidden="true">
+          <span class="emblem-line"></span>
+          <span class="emblem-star">✧</span>
+          <span class="emblem-line"></span>
+        </div>
+        <p class="eyebrow intro-eyebrow">ЛИЧНОЕ ДЕЛО № 2806</p>
+        <h1 id="intro-title">ВЫБЕРИ СВОЙ<br><span>КОМПРОМАТ</span></h1>
+        <p class="intro-subtitle">Три подруги. Одна невеста.<br>Слишком много секретов.</p>
+        <p class="intro-note">Некоторые истории лучше оставить в прошлом.<br>Но сегодня не тот случай.</p>
+        <button class="button button-gold intro-button" id="start-button" type="button">
+          <span>НАЧАТЬ РАССЛЕДОВАНИЕ</span><span class="button-arrow" aria-hidden="true">↗</span>
+        </button>
+        <div class="intro-footer">
+          <span>ПАРВОНА</span>
+          <span class="footer-rule"></span>
+          <span>ДОСТУП ТОЛЬКО ДЛЯ СВОИХ</span>
+        </div>
+      </div>
+      <div class="corner-mark corner-tl" aria-hidden="true"></div>
+      <div class="corner-mark corner-tr" aria-hidden="true"></div>
+      <div class="corner-mark corner-bl" aria-hidden="true"></div>
+      <div class="corner-mark corner-br" aria-hidden="true"></div>
+    </section>
+
+    <!-- Игровое поле -->
+    <section class="screen game-screen" id="game-screen" aria-labelledby="game-title" hidden>
+      <header class="game-header">
+        <div class="header-brand">
+          <span class="brand-seal" aria-hidden="true">✦</span>
+          <div>
+            <p class="brand-kicker">ДЕВИЧНИК 2026 · СЕКРЕТНО</p>
+            <h2 id="game-title">ВЫБЕРИ СВОЙ КОМПРОМАТ</h2>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-button" id="fullscreen-button" type="button" aria-label="Включить полноэкранный режим" title="Полноэкранный режим">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></svg>
+          </button>
+          <button class="text-button reset-button" id="reset-button" type="button">СБРОСИТЬ ИГРУ</button>
+        </div>
+      </header>
+
+      <div class="game-content">
+        <div class="turn-panel">
+          <div class="turn-copy">
+            <span class="panel-label">СЛЕДУЮЩИЙ ХОД</span>
+            <p>Сейчас выбирает:</p>
+          </div>
+          <label class="select-wrap" for="player-select">
+            <span class="sr-only">Выбрать участницу, которая ходит сейчас</span>
+            <select id="player-select">
+              <option value="0">Наташа Алексеева</option>
+              <option value="1">Наташа Ананьева</option>
+              <option value="2">Катя Русакова</option>
+            </select>
+            <span class="select-chevron" aria-hidden="true">⌄</span>
+          </label>
+          <div class="turn-stamp" aria-hidden="true"><span>ВАШ</span><strong>ХОД</strong></div>
+        </div>
+
+        <div class="field-heading">
+          <div>
+            <p class="eyebrow">АРХИВ НЕРАСКРЫТЫХ ИСТОРИЙ</p>
+            <h3>Выбери номер. Не задавай вопросов.</h3>
+          </div>
+          <p class="field-side-note">Категория останется<br>тайной до открытия</p>
+        </div>
+
+        <div class="card-grid" id="card-grid" aria-label="Игровые карточки с номерами от 1 до 20"></div>
+
+        <div class="progress-section">
+          <div class="progress-meta">
+            <span id="progress-label">Открыто 0 из 20 карточек</span>
+            <span class="progress-caption">ДОСЬЕ РАСКРЫТО</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-label="Количество открытых карточек" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" id="progress-track">
+            <span class="progress-fill" id="progress-fill"></span>
+          </div>
+        </div>
+
+        <div class="final-entry">
+          <div class="final-entry-copy">
+            <span class="final-entry-kicker">ПОСЛЕДНЕЕ ДЕЛО</span>
+            <p>Когда будете готовы — у невесты тоже найдётся, что сказать.</p>
+          </div>
+          <button class="button button-outline-gold" id="open-final-button" type="button">
+            <span>СЕКРЕТНЫЙ ФИНАЛ</span><span aria-hidden="true">✦</span>
+          </button>
+        </div>
+      </div>
+      <footer class="game-footer">
+        <span>ЗАКРЫТЫЙ ЖЕНСКИЙ КЛУБ</span>
+        <span class="footer-dot">✦</span>
+        <span>ФАМИЛИЮ СМЕНИТЬ МОЖНО. ДРУЖБУ — НЕТ.</span>
+      </footer>
+    </section>
+
+    <!-- Экран задания -->
+    <section class="screen task-screen" id="task-screen" aria-labelledby="task-question" hidden>
+      <header class="task-header">
+        <button class="back-link" id="back-to-field" type="button"><span aria-hidden="true">←</span> НАЗАД К ПОЛЮ</button>
+        <div class="task-header-label"><span class="tiny-star">✦</span> СЕКРЕТНОЕ ДОСЬЕ <span class="tiny-star">✦</span></div>
+        <span class="task-header-right">ПАРВОНА · 2026</span>
+      </header>
+
+      <div class="task-stage">
+        <div class="task-paper">
+          <div class="paper-topline">
+            <span class="paper-label">ЛИЧНОЕ ДЕЛО</span>
+            <span class="paper-number" id="task-number">КАРТОЧКА № 01</span>
+          </div>
+          <div class="paper-ornament" aria-hidden="true"><span></span><b>✧</b><span></span></div>
+          <div class="category-tag" id="task-category">КОМПРОМАТ</div>
+          <p class="task-overline">ВОПРОС / ЗАДАНИЕ</p>
+          <h1 class="task-question" id="task-question" tabindex="-1"></h1>
+          <p class="task-instruction" id="task-instruction" hidden></p>
+          <div class="paper-bottomline">
+            <span>НЕ ДЛЯ ПРОТОКОЛА</span>
+            <span>✦</span>
+            <span id="task-status">ИСТОРИЯ ОЖИДАЕТ</span>
+          </div>
+        </div>
+
+        <div class="task-controls">
+          <div class="timer-panel">
+            <div class="timer-copy">
+              <span class="panel-label">ВРЕМЯ НА ОТВЕТ</span>
+              <strong id="timer-display">00:30</strong>
+            </div>
+            <button class="timer-button" id="timer-button" type="button">ЗАПУСТИТЬ 30 СЕКУНД</button>
+          </div>
+          <div class="task-actions">
+            <button class="button button-gold complete-button" id="complete-button" type="button">ВЫПОЛНЕНО <span aria-hidden="true">✓</span></button>
+            <button class="button button-muted" id="skip-button" type="button">ПРОПУСТИТЬ ВОПРОС</button>
+          </div>
+          <p class="task-hint">Можно пропустить любой вопрос. Никаких штрафов — это ваш вечер.</p>
+        </div>
+      </div>
+      <footer class="task-footer">
+        <span>СЕКРЕТНОСТЬ: МАКСИМАЛЬНАЯ</span>
+        <span>ДОКУМЕНТ НЕ ПОДЛЕЖИТ УНИЧТОЖЕНИЮ</span>
+      </footer>
+    </section>
+
+    <!-- Финальный экран -->
+    <section class="screen final-screen" id="final-screen" aria-labelledby="final-title" hidden>
+      <div class="final-frame">
+        <div class="final-topline"><span>ДЕВИЧНИК 2026</span><span>ДЕЛО № 2806</span></div>
+        <div class="final-seal" aria-hidden="true">✧</div>
+        <p class="final-reveal reveal-one">ДЕЛО ПОЧТИ ЗАКРЫТО...</p>
+        <p class="final-reveal reveal-two">НО У НЕВЕСТЫ ЕСТЬ ОДИН ПОСЛЕДНИЙ СЕКРЕТ</p>
+        <h1 class="final-title reveal-three" id="final-title">ДЕВОЧКИ,<br>А ТЕПЕРЬ МОЯ ОЧЕРЕДЬ</h1>
+        <div class="final-message reveal-four">
+          <p>Сегодня вы приготовили для меня столько всего. Но я тоже хочу кое-что вам сказать.</p>
+          <p>Каждая из вас стала частью моей жизни. И я не представляю свою историю без вас.</p>
+        </div>
+        <p class="final-gift reveal-five">У МЕНЯ ЕСТЬ ДЛЯ ВАС КОЕ-ЧТО ОСОБЕННОЕ <span>♥</span></p>
+        <p class="final-stage-note reveal-six">СЕЙЧАС НЕВЕСТА ВРУЧАЕТ ЛИЧНЫЕ ПИСЬМА</p>
+        <div class="final-bottom reveal-seven">
+          <p>ФАМИЛИЮ СМЕНИТЬ МОЖНО.<br><span>ДРУЖБУ — НЕТ.</span></p>
+          <small>Членство в клубе девичьих фамилий бессрочное.</small>
+        </div>
+        <button class="final-back-button" id="final-back-button" type="button">ВЕРНУТЬСЯ К ДОСЬЕ</button>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="confirm-modal" id="confirm-modal" hidden>
+      <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description">
+        <span class="modal-stamp">ВНИМАНИЕ</span>
+        <h2 id="confirm-title">Закрыть дело?</h2>
+        <p id="confirm-description">Весь прогресс, отметки и очередь участниц будут сброшены.</p>
+        <div class="modal-actions">
+          <button class="button button-muted" id="cancel-reset" type="button">ОСТАВИТЬ КАК ЕСТЬ</button>
+          <button class="button button-danger" id="confirm-reset" type="button">СБРОСИТЬ</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
